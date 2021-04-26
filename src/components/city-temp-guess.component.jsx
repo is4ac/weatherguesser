@@ -37,7 +37,7 @@ export default class CityTempGuess extends Component {
     }
 
     getRandomCity() {
-        axios.get('http://localhost:5000/temperatures/random')
+        axios.get('http://localhost:5000/api/temperatures/random')
             .then(response => {
                 if ("city" in response.data) {
                     if (this.gameRound.addCity(response.data.city, response.data.countryCode)) {
@@ -75,7 +75,7 @@ export default class CityTempGuess extends Component {
         let params = `city=${this.state.cityAscii}&country=${this.state.countryCode}`;
         params = encodeURI(params);
 
-        axios.get(`http://localhost:5000/temperatures?${params}`)
+        axios.get(`http://localhost:5000/api/temperatures?${params}`)
             .then(response => {
                 if ("temperature" in response.data) {
                     let temperature = Math.round(response.data.temperature);
