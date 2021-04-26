@@ -2,7 +2,7 @@ const router = require('express').Router();
 let Temperature = require('../models/temperature.model');
 
 // Get city, country temp
-router.route('/').get((req, res) => {
+router.route('/temperatures').get((req, res) => {
     const city = req.query.city;
     const country = req.query.country;
 
@@ -11,7 +11,7 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/random').get((req, res) => {
+router.route('/temperatures/random').get((req, res) => {
     // Get the count of all users
     Temperature.countDocuments()
         .then(count => {
