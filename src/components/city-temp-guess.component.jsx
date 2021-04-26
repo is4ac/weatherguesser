@@ -6,6 +6,8 @@ import GameRound from "../model/game-round";
 import GameOver from "./game-over.component";
 
 export default class CityTempGuess extends Component {
+    static URL = "http://ec2-34-221-47-206.us-west-2.compute.amazonaws.com";
+
     constructor(props) {
         super(props);
 
@@ -37,7 +39,7 @@ export default class CityTempGuess extends Component {
     }
 
     getRandomCity() {
-        axios.get('http://localhost:5000/api/temperatures/random')
+        axios.get(CityTempGuess.URL + '/api/temperatures/random')
             .then(response => {
                 if ("city" in response.data) {
                     if (this.gameRound.addCity(response.data.city, response.data.countryCode)) {
@@ -75,7 +77,7 @@ export default class CityTempGuess extends Component {
         let params = `city=${this.state.cityAscii}&country=${this.state.countryCode}`;
         params = encodeURI(params);
 
-        axios.get(`http://localhost:5000/api/temperatures?${params}`)
+        axios.get(`${CityTempGuess.URL}/api/temperatures?${params}`)
             .then(response => {
                 if ("temperature" in response.data) {
                     let temperature = Math.round(response.data.temperature);
