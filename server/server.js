@@ -22,7 +22,7 @@ connection.once('open', () => {
 
 // Set up routes
 const temperaturesRouter = require('./routes/temperatures');
-app.use('/temperatures', temperaturesRouter);
+app.use('/api/temperatures', temperaturesRouter);
 
 // Set up scheduled updates of city temperature data
 // Schedule tasks to be run on the server.
