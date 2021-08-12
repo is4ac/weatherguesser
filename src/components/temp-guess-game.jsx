@@ -18,7 +18,7 @@ export default class TempGuessGame extends Component {
         if (process.env.REACT_APP_ENV === "development") {
             this.prefix = "http://localhost:5000/";
         } else {
-            this.prefix = "https://weatherguesser.isaacsung.net/";
+            this.prefix = "https://weatherguesser.isaacsung.net/api/";
         }
 
         this.gameRound = new GameRound();

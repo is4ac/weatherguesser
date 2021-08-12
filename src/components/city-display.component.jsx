@@ -9,7 +9,6 @@ export default class CityDisplay extends Component {
             display = `${this.props.city}, ${this.props.country}`;
         }
 
-        console.log(process.env.REACT_APP_GOOGLE_MAPS_KEY);
         let params = `key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&q=${display.replace(" ", "+")}`;
 
         return (
