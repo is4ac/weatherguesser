@@ -25,10 +25,13 @@ const temperaturesRouter = require('./routes/temperatures');
 app.use('/temperatures', temperaturesRouter);
 
 // Set up scheduled updates of city temperature data
-// Schedule tasks to be run on the server.
-cron.schedule('*/6 * * * * *', () => {
-    methods.updateCityTemps();
-});
+// Schedule tasks to be run on the server only if it's not in dev mode.
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV !== "development") {
+    cron.schedule('*/6 * * * * *', () => {
+        methods.updateCityTemps();
+    });
+}
 
 // Run server on port
 app.listen(port, () => {

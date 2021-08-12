@@ -10,13 +10,13 @@ export default class Results extends Component {
             message = `Perfect!! You earned ${this.props.scoreEarned} points!`;
         } else if (this.props.resultDifference <= 5) {
             alertClass = "alert-primary";
-            message = `So close! Only off by ${this.props.resultDifference} degrees Fahrenheit! You earned ${this.props.scoreEarned} points!`;
+            message = `So close! Only off by ${this.props.resultDifference}\xB0F! You earned ${this.props.scoreEarned} points!`;
         } else if (this.props.resultDifference <= 20) {
             alertClass = "alert-warning";
-            message = `You were off by ${this.props.resultDifference} degrees Fahrenheit! You earned ${this.props.scoreEarned} points!`;
+            message = `You were off by ${this.props.resultDifference}\xB0F! You earned ${this.props.scoreEarned} points!`;
         } else {
             alertClass = "alert-danger";
-            message = `You were off by ${this.props.resultDifference} degrees Fahrenheit! You lost ${-this.props.scoreEarned} points...`;
+            message = `You were off by ${this.props.resultDifference}\xB0F! You lost ${-this.props.scoreEarned} points...`;
         }
 
         return (
