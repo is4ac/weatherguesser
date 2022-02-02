@@ -1,0 +1,33 @@
+name: CD
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        
+      - name: Set up Node environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to my EC2 instance
+        uses: easingthemes/ssh-deploy@v2.2.11
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SOURCE: "./build/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
