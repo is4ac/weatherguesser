@@ -21,7 +21,9 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build
+        run: |
+          echo ${{ secrets.ENV_FILE }} | base64 --decode > .env
+          npm run build
 
       - name: Deploy to my EC2 instance
         uses: easingthemes/ssh-deploy@v2.2.11
