@@ -15,6 +15,7 @@ export default class CityDisplay extends Component {
             <div className="city-display-prompt">
                 <h3>Guess the current temperature for <span className="font-weight-bold">{display}</span>!</h3>
                 <iframe
+                    title='Map'
                     width="600"
                     height="450"
                     style={{ "border" : "0"}}
