@@ -2,8 +2,9 @@ name: CD
 
 # Controls when the workflow will run
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
@@ -11,7 +12,7 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
-        
+
       - name: Set up Node environment
         uses: actions/setup-node@v1
         with:
@@ -29,7 +30,7 @@ jobs:
         uses: easingthemes/ssh-deploy@v2.2.11
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          SOURCE: "./build/"
+          SOURCE: './build/'
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
