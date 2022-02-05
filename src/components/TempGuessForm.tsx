@@ -77,7 +77,7 @@ const TempGuessForm = ({
           </Button>
         ) : (
           <Button color='secondary' variant='contained' type='submit' sx={{ ml: 4 }}>
-            Submit Guess
+            Submit
           </Button>
         )}
       </Container>
