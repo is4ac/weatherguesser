@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -9,7 +8,6 @@ import Menu from '@mui/material/Menu'
 import SettingsIcon from '@mui/icons-material/Settings'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import { useTheme } from '@mui/styles'
@@ -20,18 +18,10 @@ const settings = ['Game Settings', 'Dark Mode']
 const NavBar = (): JSX.Element => {
   const theme = useTheme<Theme>()
 
-  const [anchorElNav, setAnchorElNav] = useState<Element | null>(null)
   const [anchorElSettings, setAnchorElSettings] = useState<Element | null>(null)
 
-  const handleOpenNavMenu = (event: React.MouseEvent) => {
-    setAnchorElNav(event.currentTarget)
-  }
   const handleOpenSettingsMenu = (event: React.MouseEvent) => {
     setAnchorElSettings(event.currentTarget)
-  }
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null)
   }
 
   const handleCloseSettingsMenu = () => {
@@ -44,13 +34,7 @@ const NavBar = (): JSX.Element => {
         <Toolbar disableGutters sx={{ ml: theme.custom.margin, mr: theme.custom.margin }}>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
             <Tooltip title='View info about game'>
-              <IconButton
-                size='large'
-                aria-label='help button'
-                aria-haspopup='true'
-                onClick={handleOpenNavMenu}
-                color='inherit'
-              >
+              <IconButton size='large' aria-label='help button' aria-haspopup='true' color='inherit'>
                 <HelpOutlineIcon />
               </IconButton>
             </Tooltip>
