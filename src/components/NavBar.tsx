@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { useTheme } from '@mui/styles'
 import { Theme } from '@mui/material/styles'
 
-const settings = ['Game Settings', 'Dark Mode']
+const settings = ['Celsius Mode', 'Dark Mode']
 
 const NavBar = (): JSX.Element => {
   const theme = useTheme<Theme>()
@@ -52,10 +52,13 @@ const NavBar = (): JSX.Element => {
               display: 'flex',
               letterSpacing: '2px',
               fontWeight: 300,
-              fontSize: { xs: '1.75rem', sm: '2.25rem' },
+              lineHeight: { xs: '1.2rem', sm: '1.6rem' },
+              fontSize: { xs: '1.4rem', sm: '1.8rem' },
             }}
           >
-            WEATHER GUESSER
+            WEATHER
+            <br />
+            GUESSER
           </Typography>
 
           <Box sx={{ flexGrow: 0 }}>

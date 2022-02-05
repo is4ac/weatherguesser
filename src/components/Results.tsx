@@ -1,58 +1,55 @@
-import { Alert, AlertColor, Box, Button, Theme, Typography, useTheme } from '@mui/material'
+import { Alert, AlertColor, Box, Theme, Typography, useTheme } from '@mui/material'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import Grow from '@mui/material/Grow'
 import React from 'react'
 
 const Results = ({
-  resultDifference,
+  guessedTemp,
   scoreEarned,
-  tempGuess,
-  city,
   correctTemp,
-  gameOver,
-  onButtonClick,
+  city,
 }: {
-  resultDifference: number
+  guessedTemp: number
   scoreEarned: number
-  tempGuess: number
   correctTemp: number
   city: string
-  gameOver: boolean
-  onButtonClick: (event: React.MouseEvent) => void
 }): JSX.Element => {
   const theme = useTheme<Theme>()
 
+  const resultDifference = Math.abs(correctTemp - guessedTemp)
   let alertVariant: AlertColor = 'success'
   let message = ''
 
   if (resultDifference === 0) {
     alertVariant = 'success'
-    message = `Perfect!! You earned ${scoreEarned} points!`
+    message = `Your guess of ${guessedTemp} was perfect!! You earned ${scoreEarned} points!`
   } else if (resultDifference <= 5) {
     alertVariant = 'info'
-    message = `So close! Only off by ${resultDifference}\xB0F! You earned ${scoreEarned} points!`
+    message = `So close! Your guess of ${guessedTemp} was only off by ${resultDifference}\xB0F! You earned ${scoreEarned} points!`
   } else if (resultDifference <= 20) {
     alertVariant = 'warning'
-    message = `You were off by ${resultDifference}\xB0F! You earned ${scoreEarned} points!`
+    message = `Your guess of ${guessedTemp} was off by ${resultDifference}\xB0F! You earned ${scoreEarned} points!`
   } else {
     alertVariant = 'error'
-    message = `You were off by ${resultDifference}\xB0F! You lost ${-scoreEarned} points...`
+    message = `Your guess of ${guessedTemp} was off by ${resultDifference}\xB0F! You lost ${-scoreEarned} points...`
   }
 
   return (
     <Box>
-      <Alert icon={<ErrorOutlineIcon fontSize='inherit' />} severity={alertVariant} sx={{ mb: 2 }}>
-        {message}
-      </Alert>
+      <Grow in={true} timeout={400} easing='ease-in-out'>
+        <Alert
+          icon={<ErrorOutlineIcon fontSize='inherit' />}
+          severity={alertVariant}
+          sx={{
+            mb: 2,
+          }}
+        >
+          {message}
+        </Alert>
+      </Grow>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Typography component='span'>
-            Your guess:{' '}
-            <Typography fontWeight={600} component='span'>
-              {tempGuess}
-            </Typography>
-          </Typography>
-
           <Typography component='span'>
             The current temperature in{' '}
             <Typography
@@ -69,15 +66,9 @@ const Results = ({
             <Typography fontWeight={600} component='span'>
               {correctTemp}
             </Typography>
-            !
+            °F!
           </Typography>
         </Box>
-
-        {!gameOver && (
-          <Button color='secondary' variant='contained' onClick={onButtonClick} sx={{ mt: 2, ml: 4 }}>
-            Next
-          </Button>
-        )}
       </Box>
     </Box>
   )

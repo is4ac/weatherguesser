@@ -9,7 +9,7 @@ import Layout from 'src/components/page-parts/Layout'
 import GoogleMap from 'src/components/GoogleMap'
 import TempGuessForm from 'src/components/TempGuessForm'
 
-const steps = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+const steps = new Array(GameRound.NUM_CITIES).fill('c')
 
 export default class TempGuessGame extends Component {
   constructor(props) {
@@ -75,16 +75,16 @@ export default class TempGuessGame extends Component {
       })
   }
 
-  onTempGuessChange(e) {
+  onTempGuessChange(guess) {
     this.setState({
-      tempGuess: e.target.value,
+      tempGuess: guess,
     })
   }
 
   onSubmit(e) {
     e.preventDefault()
 
-    const tempGuess = this.state.tempGuess
+    const tempGuess = parseInt(this.state.tempGuess)
 
     let params = `city=${this.state.cityAscii}&country=${this.state.countryCode}`
     params = encodeURI(params)
@@ -164,29 +164,26 @@ export default class TempGuessGame extends Component {
               </Box>
             )}
 
+            {this.state.displayResults && (
+              <Box sx={{ mb: 2 }}>
+                <Results
+                  correctTemp={this.state.correctTemp}
+                  guessedTemp={this.state.tempGuess}
+                  scoreEarned={this.state.scoreEarned}
+                  city={this.state.city}
+                />
+              </Box>
+            )}
+
             <Box>
               <TempGuessForm
                 onSubmit={this.onSubmit}
                 displayResults={this.state.displayResults}
                 tempGuess={this.state.tempGuess}
                 onTempGuessChange={this.onTempGuessChange}
+                onNextButtonClick={this.onNext}
               />
             </Box>
-
-            {this.state.displayResults && (
-              <Box sx={{ mb: 2 }}>
-                <Results
-                  tempGuess={this.state.tempGuess}
-                  correctTemp={this.state.correctTemp}
-                  resultDifference={this.state.resultDifference}
-                  scoreEarned={this.state.scoreEarned}
-                  city={this.state.city}
-                  gameOver={this.state.gameOver}
-                  buttonText='Next City'
-                  onButtonClick={this.onNext}
-                />
-              </Box>
-            )}
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
               <Typography variant='button'>Score: {this.state.score}</Typography>
@@ -195,28 +192,9 @@ export default class TempGuessGame extends Component {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4 }}>
               <Typography variant='button'>Cities:</Typography>
               <Stepper activeStep={this.gameRound.cityNumber - 1}>
-                {steps.map((label, index) => {
+                {steps.map((label) => {
                   return (
-                    <Step
-                      key={label}
-                      // sx={{
-                      //   '& .MuiStepLabel-root .Mui-completed': {
-                      //     color: 'secondary.main', // circle color (COMPLETED)
-                      //   },
-                      //   '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel': {
-                      //     color: 'grey.500', // Just text label (COMPLETED)
-                      //   },
-                      //   '& .MuiStepLabel-root .Mui-active': {
-                      //     color: 'secondary.main', // circle color (ACTIVE)
-                      //   },
-                      //   '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel': {
-                      //     color: 'common.white', // Just text label (ACTIVE)
-                      //   },
-                      //   '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
-                      //     fill: 'secondary.contrastText', // circle's number (ACTIVE)
-                      //   },
-                      // }}
-                    >
+                    <Step key={label}>
                       <StepLabel>{''}</StepLabel>
                     </Step>
                   )
@@ -227,7 +205,37 @@ export default class TempGuessGame extends Component {
             <GoogleMap location={location} />
           </Box>
         )}
-        {this.state.gameOver && <GameOver gameRound={this.gameRound} onButtonClick={this.onPlayAgain} />}
+        {this.state.gameOver && (
+          <Box sx={{ display: 'block' }}>
+            <Box sx={{ mb: 4 }}>
+              <Results
+                correctTemp={this.state.correctTemp}
+                guessedTemp={this.state.tempGuess}
+                scoreEarned={this.state.scoreEarned}
+                city={this.state.city}
+              />
+            </Box>
+
+            <Box sx={{ mb: 4 }}>
+              <GameOver gameRound={this.gameRound} onButtonClick={this.onPlayAgain} />
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4 }}>
+              <Typography variant='button'>Cities:</Typography>
+              <Stepper activeStep={this.gameRound.cityNumber}>
+                {steps.map((label) => {
+                  return (
+                    <Step key={label}>
+                      <StepLabel>{''}</StepLabel>
+                    </Step>
+                  )
+                })}
+              </Stepper>
+            </Box>
+
+            <GoogleMap location={location} />
+          </Box>
+        )}
       </Layout>
     )
   }

@@ -13,7 +13,7 @@ const GameOver = ({
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <Alert severity='success'>Round over!</Alert>
 
-      <Typography variant='h6' component='span' sx={{ mt: 4 }}>
+      <Typography variant='button' component='span' sx={{ mt: 4 }}>
         Final score:{' '}
         <Typography fontWeight={600} component='span'>
           {gameRound.score}

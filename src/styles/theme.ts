@@ -4,11 +4,31 @@ declare module '@mui/material/styles' {
   interface ThemeOptions {
     custom: {
       margin: number
+      palette: {
+        warning: {
+          main: string
+          contrastText: string
+        }
+        error: {
+          main: string
+          contrastText: string
+        }
+      }
     }
   }
   interface Theme {
     custom: {
       margin: number
+      palette: {
+        warning: {
+          main: string
+          contrastText: string
+        }
+        error: {
+          main: string
+          contrastText: string
+        }
+      }
     }
   }
 }
@@ -59,7 +79,50 @@ const theme = createTheme({
   },
   custom: {
     margin: 4,
+    palette: {
+      warning: {
+        main: '#8c442c',
+        contrastText: '#ffffff',
+      },
+      error: {
+        main: '#8c2c74',
+        contrastText: '#ffffff',
+      },
+    },
   },
 })
 
-export default theme
+const themeCustomComponents = createTheme({
+  ...theme,
+  components: {
+    MuiAlert: {
+      styleOverrides: {
+        standardSuccess: {
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+        },
+        standardInfo: {
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+        },
+        standardWarning: {
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.secondary.contrastText,
+        },
+        standardError: {
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.secondary.contrastText,
+        },
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: theme.palette.primary.contrastText,
+        },
+      },
+    },
+  },
+})
+
+export default themeCustomComponents

@@ -2,7 +2,7 @@ export default class GameRound {
   score: number
   cities: string[]
   cityNumber: number
-  static NUM_CITIES = 10
+  static NUM_CITIES = 5
 
   constructor() {
     this.score = 0
