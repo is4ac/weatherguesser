@@ -66,7 +66,7 @@ const TempGuessForm = ({
                 onTempGuessChange(parsedInt.toString())
               }
             }}
-            inputProps={{ inputMode: 'numeric', pattern: '-?[0-9]*', style: { textAlign: 'right' } }}
+            inputProps={{ pattern: '-?[0-9]*', style: { textAlign: 'right' } }}
             title='Whole integers only'
           />
         </Box>
