@@ -1,5 +1,7 @@
-import { Alert, Box, Button, Container, Grow, TextField } from '@mui/material'
+import { Box, Container, TextField } from '@mui/material'
 import React, { useState } from 'react'
+import AnimatedAlert from './AnimatedAlert'
+import GuessFormButton from './GuessFormButton'
 
 const TempGuessForm = ({
   onSubmit,
@@ -18,21 +20,31 @@ const TempGuessForm = ({
 
   const textFieldDisabled = displayResults ? true : false
 
-  return (
-    <form
-      id='city-temp-form'
-      onSubmit={(event: React.FormEvent) => {
-        event.preventDefault()
+  const submitHandler = (event: React.FormEvent) => {
+    event.preventDefault()
 
-        console.log(tempGuess)
-        if (Number.isFinite(parseInt(tempGuess))) {
-          onSubmit(event)
-        } else {
-          // Validation error on submit
-          setHasError(true)
-        }
-      }}
-    >
+    if (Number.isFinite(parseInt(tempGuess))) {
+      onSubmit(event)
+    } else {
+      // Validation error on submit
+      setHasError(true)
+    }
+  }
+
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    const parsedInt = parseInt(value)
+    if (value === '' || value === '-') {
+      setHasError(false)
+      onTempGuessChange(value)
+    } else if (Number.isFinite(parsedInt)) {
+      setHasError(false)
+      onTempGuessChange(parsedInt.toString())
+    }
+  }
+
+  return (
+    <form id='city-temp-form' onSubmit={submitHandler}>
       <Container
         sx={{
           display: 'flex',
@@ -55,36 +67,18 @@ const TempGuessForm = ({
             size='small'
             label='Temp. (°F)'
             value={tempGuess}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const { value } = event.target
-              const parsedInt = parseInt(value)
-              if (value === '' || value === '-') {
-                setHasError(false)
-                onTempGuessChange(value)
-              } else if (Number.isFinite(parsedInt)) {
-                setHasError(false)
-                onTempGuessChange(parsedInt.toString())
-              }
-            }}
+            onChange={changeHandler}
             inputProps={{ pattern: '-?[0-9]*', style: { textAlign: 'right' } }}
             title='Whole integers only'
           />
         </Box>
 
-        {displayResults ? (
-          <Button color='secondary' variant='contained' onClick={onNextButtonClick} sx={{ ml: 4 }}>
-            Next
-          </Button>
-        ) : (
-          <Button color='secondary' variant='contained' type='submit' sx={{ ml: 4 }}>
-            Submit
-          </Button>
-        )}
+        <Box sx={{ ml: 4 }}>
+          <GuessFormButton next={displayResults} onNext={onNextButtonClick} />
+        </Box>
       </Container>
 
-      <Grow in={hasError} timeout={400} easing='ease-in-out'>
-        <Alert severity='error'>Must be a valid whole number.</Alert>
-      </Grow>
+      <AnimatedAlert show={hasError} message='Must be a valid whole number.' />
     </form>
   )
 }

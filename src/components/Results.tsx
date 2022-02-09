@@ -1,7 +1,6 @@
-import { Alert, AlertColor, Box, Theme, Typography, useTheme } from '@mui/material'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
-import Grow from '@mui/material/Grow'
-import React from 'react'
+import { AlertColor, Box } from '@mui/material'
+import AnimatedAlert from './AnimatedAlert'
+import CurrentTempDisplay from './CurrentTempDisplay'
 
 const Results = ({
   guessedTemp,
@@ -14,8 +13,6 @@ const Results = ({
   correctTemp: number
   city: string
 }): JSX.Element => {
-  const theme = useTheme<Theme>()
-
   const resultDifference = Math.abs(correctTemp - guessedTemp)
   let alertVariant: AlertColor = 'success'
   let message = ''
@@ -36,39 +33,12 @@ const Results = ({
 
   return (
     <Box>
-      <Grow in={true} timeout={400} easing='ease-in-out'>
-        <Alert
-          icon={<ErrorOutlineIcon fontSize='inherit' />}
-          severity={alertVariant}
-          sx={{
-            mb: 2,
-          }}
-        >
-          {message}
-        </Alert>
-      </Grow>
+      <Box sx={{ mb: 2 }}>
+        <AnimatedAlert show={true} message={message} severity={alertVariant} />
+      </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Typography component='span'>
-            The current temperature in{' '}
-            <Typography
-              component='span'
-              lineHeight='1.7rem'
-              padding='0.35rem 0.25rem'
-              color={theme.palette.secondary.contrastText}
-              bgcolor={theme.palette.secondary.main}
-              fontWeight={600}
-            >
-              {city}
-            </Typography>{' '}
-            is{' '}
-            <Typography fontWeight={600} component='span'>
-              {correctTemp}
-            </Typography>
-            °F!
-          </Typography>
-        </Box>
+        <CurrentTempDisplay city={city} temp={correctTemp} />
       </Box>
     </Box>
   )
