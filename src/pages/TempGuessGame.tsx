@@ -151,7 +151,7 @@ const TempGuessGame = (): JSX.Element => {
         <Box>
           <TempGuessForm
             onSubmit={onSubmit}
-            displayResults={displayResults}
+            textFieldDisabled={displayResults}
             tempGuess={tempGuess}
             onTempGuessChange={onTempGuessChange}
             onNextButtonClick={onNext}

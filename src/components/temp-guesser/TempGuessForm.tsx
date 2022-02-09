@@ -1,24 +1,38 @@
-import { Box, Container, TextField } from '@mui/material'
+import { Box, Container, Stack } from '@mui/material'
 import React, { useState } from 'react'
 import AnimatedAlert from '../general/AnimatedAlert'
 import GuessFormButton from '../general/GuessFormButton'
+import InputSlider from '../general/InputSlider'
+
+const marks = [
+  {
+    value: 0,
+    label: '0°F',
+  },
+  {
+    value: 140,
+    label: '140°F',
+  },
+  {
+    value: -140,
+    label: '-140°F',
+  },
+]
 
 const TempGuessForm = ({
   onSubmit,
-  displayResults,
+  textFieldDisabled,
   tempGuess,
   onTempGuessChange,
   onNextButtonClick,
 }: {
   onSubmit: (event: React.FormEvent) => void
-  displayResults: boolean
+  textFieldDisabled: boolean
   tempGuess: string
   onTempGuessChange: (guess: string) => void
   onNextButtonClick: (event: React.MouseEvent) => void
 }): JSX.Element => {
   const [hasError, setHasError] = useState<boolean>(false)
-
-  const textFieldDisabled = displayResults ? true : false
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault()
@@ -28,18 +42,6 @@ const TempGuessForm = ({
     } else {
       // Validation error on submit
       setHasError(true)
-    }
-  }
-
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    const parsedInt = parseInt(value)
-    if (value === '' || value === '-') {
-      setHasError(false)
-      onTempGuessChange(value)
-    } else if (Number.isFinite(parsedInt)) {
-      setHasError(false)
-      onTempGuessChange(parsedInt.toString())
     }
   }
 
@@ -53,29 +55,22 @@ const TempGuessForm = ({
           mb: 2,
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            '& .MuiTextField-root': { width: '12ch' },
-          }}
-        >
-          <TextField
+        <Stack spacing={1} direction='row' alignItems='center'>
+          <InputSlider
+            height={250}
+            marks={marks}
+            min={-140}
+            max={140}
             disabled={textFieldDisabled}
-            type='text'
-            variant='outlined'
-            size='small'
-            label='Temp. (°F)'
             value={tempGuess}
-            onChange={changeHandler}
-            inputProps={{ pattern: '-?[0-9]*', style: { textAlign: 'right' } }}
-            title='Whole integers only'
+            onChange={onTempGuessChange}
+            onError={setHasError}
           />
-        </Box>
 
-        <Box sx={{ ml: 4 }}>
-          <GuessFormButton next={displayResults} onNext={onNextButtonClick} />
-        </Box>
+          <Box sx={{ ml: 4 }}>
+            <GuessFormButton next={textFieldDisabled} onNext={onNextButtonClick} />
+          </Box>
+        </Stack>
       </Container>
 
       <AnimatedAlert show={hasError} message='Must be a valid whole number.' />
