@@ -7,19 +7,7 @@ export default function Routes(): JSX.Element {
     <Router>
       <Switch>
         <Route path='/' exact>
-          <TempGuessGame mode='citiesandmaps' />
-        </Route>
-
-        <Route path='/cities' exact>
-          <TempGuessGame mode='cities' />
-        </Route>
-
-        <Route path='/maps' exact>
-          <TempGuessGame mode='maps' />
-        </Route>
-
-        <Route path='/citiesandmaps' exact>
-          <TempGuessGame mode='citiesandmaps' />
+          <TempGuessGame />
         </Route>
       </Switch>
     </Router>

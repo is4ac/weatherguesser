@@ -3,7 +3,7 @@ import { grey } from '@mui/material/colors'
 import { Theme } from '@mui/material/styles'
 import { useTheme } from '@mui/styles'
 import React, { ReactNode } from 'react'
-import NavBar from '../NavBar'
+import NavBar from './NavBar'
 
 const Layout = ({ children }: { children?: ReactNode }): JSX.Element => {
   const theme = useTheme<Theme>()

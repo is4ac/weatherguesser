@@ -1,5 +1,5 @@
 import { AlertColor, Box } from '@mui/material'
-import AnimatedAlert from './AnimatedAlert'
+import AnimatedAlert from '../general/AnimatedAlert'
 import CurrentTempDisplay from './CurrentTempDisplay'
 
 const Results = ({

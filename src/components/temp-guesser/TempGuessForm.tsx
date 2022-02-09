@@ -1,7 +1,7 @@
 import { Box, Container, TextField } from '@mui/material'
 import React, { useState } from 'react'
-import AnimatedAlert from './AnimatedAlert'
-import GuessFormButton from './GuessFormButton'
+import AnimatedAlert from '../general/AnimatedAlert'
+import GuessFormButton from '../general/GuessFormButton'
 
 const TempGuessForm = ({
   onSubmit,
