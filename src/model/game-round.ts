@@ -22,7 +22,7 @@ export default class GameRound {
   }
 
   updateScore(difference: number) {
-    let scoreEarned = 20 - difference
+    let scoreEarned = Math.max(20 - difference, -20)
     this.score += scoreEarned
     return scoreEarned
   }
