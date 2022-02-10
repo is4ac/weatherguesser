@@ -148,7 +148,7 @@ const TempGuessGame = (): JSX.Element => {
           </Box>
         )}
 
-        <Box>
+        {!gameOver && (
           <TempGuessForm
             onSubmit={onSubmit}
             textFieldDisabled={displayResults}
@@ -156,7 +156,7 @@ const TempGuessGame = (): JSX.Element => {
             onTempGuessChange={onTempGuessChange}
             onNextButtonClick={onNext}
           />
-        </Box>
+        )}
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
           <ScoreDisplay label='Score' score={score} />
