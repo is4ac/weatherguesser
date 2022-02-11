@@ -1,5 +1,4 @@
 import { Box, Container } from '@mui/material'
-import { grey } from '@mui/material/colors'
 import { Theme } from '@mui/material/styles'
 import { useTheme } from '@mui/styles'
 import React, { ReactNode } from 'react'
@@ -11,7 +10,8 @@ const Layout = ({ children }: { children?: ReactNode }): JSX.Element => {
   return (
     <Box
       sx={{
-        background: grey[200],
+        bgcolor: 'background.default',
+        color: 'text.primary',
         width: '100%',
         minHeight: '100vh',
       }}
@@ -21,8 +21,8 @@ const Layout = ({ children }: { children?: ReactNode }): JSX.Element => {
         <Box
           sx={{
             mt: 4,
-            ml: theme.custom.margin,
-            mr: theme.custom.margin,
+            ml: theme.custom?.margin,
+            mr: theme.custom?.margin,
           }}
         >
           {children}

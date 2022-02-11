@@ -4,34 +4,31 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import Menu from '@mui/material/Menu'
 import SettingsIcon from '@mui/icons-material/Settings'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Container from '@mui/material/Container'
 import Tooltip from '@mui/material/Tooltip'
-import MenuItem from '@mui/material/MenuItem'
 import { useTheme } from '@mui/styles'
 import { Theme } from '@mui/material/styles'
-
-const settings = ['Celsius Mode', 'Dark Mode']
+import SettingsDialog from '../general/SettingsDialog'
 
 const NavBar = (): JSX.Element => {
   const theme = useTheme<Theme>()
 
-  const [anchorElSettings, setAnchorElSettings] = useState<Element | null>(null)
+  const [openSettings, setOpenSettings] = useState<boolean>(false)
 
-  const handleOpenSettingsMenu = (event: React.MouseEvent) => {
-    setAnchorElSettings(event.currentTarget)
+  const handleOpenSettingsMenu = () => {
+    setOpenSettings(true)
   }
 
   const handleCloseSettingsMenu = () => {
-    setAnchorElSettings(null)
+    setOpenSettings(false)
   }
 
   return (
     <AppBar position='static' sx={{ background: theme.palette.primary.main }}>
       <Container maxWidth='sm'>
-        <Toolbar disableGutters sx={{ ml: theme.custom.margin, mr: theme.custom.margin }}>
+        <Toolbar disableGutters sx={{ ml: theme.custom?.margin, mr: theme.custom?.margin }}>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
             <Tooltip title='View info about game'>
               <IconButton size='large' aria-label='help button' aria-haspopup='true' color='inherit'>
@@ -72,28 +69,7 @@ const NavBar = (): JSX.Element => {
                 <SettingsIcon style={{ color: theme.palette.primary.contrastText }} />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id='menu-appbar'
-              anchorEl={anchorElSettings}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElSettings)}
-              onClose={handleCloseSettingsMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseSettingsMenu}>
-                  <Typography textAlign='center'>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            <SettingsDialog open={openSettings} onClose={handleCloseSettingsMenu} />
           </Box>
         </Toolbar>
       </Container>

@@ -1,23 +1,9 @@
 import { Box, Container, Stack } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import AnimatedAlert from '../general/AnimatedAlert'
 import GuessFormButton from '../general/GuessFormButton'
 import InputSlider from '../general/InputSlider'
-
-const marks = [
-  {
-    value: 0,
-    label: '0°F',
-  },
-  {
-    value: 140,
-    label: '140°F',
-  },
-  {
-    value: -140,
-    label: '-140°F',
-  },
-]
+import { TempModeContext } from 'src/contexts'
 
 const TempGuessForm = ({
   onSubmit,
@@ -32,6 +18,8 @@ const TempGuessForm = ({
   onTempGuessChange: (guess: string) => void
   onNextButtonClick: (event: React.MouseEvent) => void
 }): JSX.Element => {
+  const tempMode = useContext(TempModeContext)
+
   const [hasError, setHasError] = useState<boolean>(false)
 
   const submitHandler = (event: React.FormEvent) => {
@@ -44,6 +32,43 @@ const TempGuessForm = ({
       setHasError(true)
     }
   }
+
+  const marks = useMemo(
+    () =>
+      tempMode.mode === 'F'
+        ? [
+            {
+              value: 0,
+              label: '0°F',
+            },
+            {
+              value: 140,
+              label: '140°F',
+            },
+            {
+              value: -140,
+              label: '-140°F',
+            },
+          ]
+        : [
+            {
+              value: 0,
+              label: '0°C',
+            },
+            {
+              value: 60,
+              label: '60°C',
+            },
+            {
+              value: -96,
+              label: '-96°C',
+            },
+          ],
+    [tempMode.mode],
+  )
+
+  const max = tempMode.mode === 'F' ? 140 : 60
+  const min = tempMode.mode === 'F' ? -140 : -96
 
   return (
     <form id='city-temp-form' onSubmit={submitHandler}>
@@ -59,8 +84,10 @@ const TempGuessForm = ({
           <InputSlider
             height={250}
             marks={marks}
-            min={-140}
-            max={140}
+            min={min}
+            max={max}
+            step={tempMode.mode === 'F' ? 1 : 0.5}
+            label={tempMode.mode === 'F' ? 'Temp. (°F)' : 'Temp. (°C)'}
             disabled={textFieldDisabled}
             value={tempGuess}
             onChange={onTempGuessChange}

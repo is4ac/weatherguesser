@@ -1,34 +1,17 @@
+import { PaletteMode } from '@mui/material'
+import { grey } from '@mui/material/colors'
 import { createTheme } from '@mui/material/styles'
+import { createContext } from 'react'
 
 declare module '@mui/material/styles' {
   interface ThemeOptions {
-    custom: {
+    custom?: {
       margin: number
-      palette: {
-        warning: {
-          main: string
-          contrastText: string
-        }
-        error: {
-          main: string
-          contrastText: string
-        }
-      }
     }
   }
   interface Theme {
-    custom: {
+    custom?: {
       margin: number
-      palette: {
-        warning: {
-          main: string
-          contrastText: string
-        }
-        error: {
-          main: string
-          contrastText: string
-        }
-      }
     }
   }
 }
@@ -41,8 +24,7 @@ const headingDefaults = {
   lineHeight: 1.2,
 }
 
-const theme = createTheme({
-  spacing: 4,
+const colorPalette = createTheme({
   palette: {
     primary: {
       main: '#2c748c',
@@ -51,6 +33,95 @@ const theme = createTheme({
       main: '#442c8c',
     },
   },
+})
+
+export const lightPalette = createTheme({
+  palette: {
+    primary: {
+      main: colorPalette.palette.primary.light,
+    },
+    secondary: {
+      main: colorPalette.palette.secondary.light,
+    },
+  },
+})
+
+export const lighterPalette = createTheme({
+  palette: {
+    primary: {
+      main: lightPalette.palette.primary.light,
+    },
+    secondary: {
+      main: lightPalette.palette.secondary.light,
+    },
+  },
+})
+
+export const darkPalette = createTheme({
+  palette: {
+    primary: {
+      main: colorPalette.palette.primary.dark,
+    },
+    secondary: {
+      main: colorPalette.palette.secondary.dark,
+    },
+  },
+})
+
+const themeCustomComponents = {
+  components: {
+    MuiAlert: {
+      styleOverrides: {
+        standardSuccess: {
+          backgroundColor: colorPalette.palette.primary.main,
+          color: colorPalette.palette.primary.contrastText,
+        },
+        standardInfo: {
+          backgroundColor: colorPalette.palette.primary.main,
+          color: colorPalette.palette.primary.contrastText,
+        },
+        standardWarning: {
+          backgroundColor: colorPalette.palette.secondary.main,
+          color: colorPalette.palette.secondary.contrastText,
+        },
+        standardError: {
+          backgroundColor: colorPalette.palette.secondary.main,
+          color: colorPalette.palette.secondary.contrastText,
+        },
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: colorPalette.palette.primary.contrastText,
+        },
+      },
+    },
+    MuiSwitch: {
+      styleOverrides: {
+        root: {},
+        switchBase: {
+          '&.Mui-checked': {
+            // Controls checked color for the thumb
+            color: lighterPalette.palette.primary.main,
+          },
+          '&.Mui-checked + .MuiSwitch-track': {
+            backgroundColor: lighterPalette.palette.primary.main,
+          },
+        },
+        checked: {},
+        track: {},
+      },
+    },
+  },
+}
+
+export const getDesignTokens = (mode: PaletteMode) => ({
+  ...themeCustomComponents,
+  custom: {
+    margin: 4,
+  },
+  spacing: 4,
   typography: {
     h1: {
       ...headingDefaults,
@@ -77,52 +148,42 @@ const theme = createTheme({
       fontSize: '1rem',
     },
   },
-  custom: {
-    margin: 4,
-    palette: {
-      warning: {
-        main: '#8c442c',
-        contrastText: '#ffffff',
-      },
-      error: {
-        main: '#8c2c74',
-        contrastText: '#ffffff',
-      },
-    },
+  palette: {
+    mode,
+    ...(mode === 'light'
+      ? {
+          // palette values for light mode
+          primary: {
+            ...colorPalette.palette.primary,
+          },
+          secondary: {
+            ...colorPalette.palette.secondary,
+          },
+          background: {
+            paper: grey[200],
+            default: grey[200],
+          },
+          text: {
+            primary: '#000000',
+          },
+        }
+      : {
+          // palette values for dark mode
+          primary: {
+            ...colorPalette.palette.primary,
+          },
+          secondary: {
+            ...colorPalette.palette.secondary,
+          },
+          background: {
+            paper: grey[900],
+            default: grey[900],
+          },
+          text: {
+            primary: '#ffffff',
+          },
+        }),
   },
 })
 
-const themeCustomComponents = createTheme({
-  ...theme,
-  components: {
-    MuiAlert: {
-      styleOverrides: {
-        standardSuccess: {
-          backgroundColor: theme.palette.primary.main,
-          color: theme.palette.primary.contrastText,
-        },
-        standardInfo: {
-          backgroundColor: theme.palette.primary.main,
-          color: theme.palette.primary.contrastText,
-        },
-        standardWarning: {
-          backgroundColor: theme.palette.secondary.main,
-          color: theme.palette.secondary.contrastText,
-        },
-        standardError: {
-          backgroundColor: theme.palette.secondary.main,
-          color: theme.palette.secondary.contrastText,
-        },
-      },
-    },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: {
-          color: theme.palette.primary.contrastText,
-        },
-      },
-    },
-  },
-})
-
-export default themeCustomComponents
+export const ColorModeContext = createContext({ toggleColorMode: () => {} })

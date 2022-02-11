@@ -8,7 +8,9 @@ const InputSlider = ({
   height,
   min,
   max,
+  step,
   disabled,
+  label,
   value,
   onChange,
   onError,
@@ -17,7 +19,9 @@ const InputSlider = ({
   height: number
   min: number
   max: number
+  step: number
   disabled: boolean
+  label: string
   value: string
   onChange: (value: string) => void
   onError: (error: boolean) => void
@@ -48,7 +52,7 @@ const InputSlider = ({
         orientation='vertical'
         value={sliderValue ? sliderValue : 0}
         valueLabelDisplay='auto'
-        step={1}
+        step={step}
         marks={marks}
         min={min}
         max={max}
@@ -60,6 +64,7 @@ const InputSlider = ({
       <IntegerTextField
         disabled={disabled}
         value={value}
+        label={label}
         onChange={onChange}
         onError={onError}
         inputProps={{

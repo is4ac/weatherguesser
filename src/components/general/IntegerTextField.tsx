@@ -4,6 +4,7 @@ import React from 'react'
 const IntegerTextField = ({
   disabled,
   value,
+  label,
   inputProps,
   onChange,
   onError,
@@ -11,6 +12,7 @@ const IntegerTextField = ({
 }: {
   disabled: boolean
   value: string
+  label: string
   inputProps?: InputBaseComponentProps
   onChange: (value: string) => void
   onError: (error: boolean) => void
@@ -39,7 +41,7 @@ const IntegerTextField = ({
         type='text'
         variant='outlined'
         size='small'
-        label='Temp. (°F)'
+        label={label}
         value={value}
         onChange={changeHandler}
         onBlur={onBlur}

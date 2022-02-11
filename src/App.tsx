@@ -1,10 +1,40 @@
-import { ThemeProvider } from '@mui/material'
-import React, { useEffect } from 'react'
+import { ThemeProvider, createTheme, useMediaQuery } from '@mui/material'
+import React, { useEffect, useMemo, useState } from 'react'
 import Routes from './Routes'
-import theme from './styles/theme'
+import { getDesignTokens, ColorModeContext } from './styles/theme'
+import { TempModeContext } from './contexts'
 import './index.css'
 
 function App(): JSX.Element {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+
+  const [mode, setMode] = useState<'light' | 'dark'>(prefersDarkMode ? 'dark' : 'light')
+  const colorModeContext = useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
+      },
+    }),
+    [],
+  )
+
+  const [tempMode, setTempMode] = useState<'F' | 'C'>('F')
+  const tempModeContext = useMemo(
+    () => ({
+      toggleTempMode: () => {
+        setTempMode((prevMode) => (prevMode === 'F' ? 'C' : 'F'))
+      },
+      mode: tempMode,
+    }),
+    [tempMode],
+  )
+
+  useEffect(() => {
+    setMode(prefersDarkMode ? 'dark' : 'light')
+  }, [prefersDarkMode])
+
+  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode])
+
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side')
@@ -14,9 +44,13 @@ function App(): JSX.Element {
   }, [])
 
   return (
-    <ThemeProvider theme={theme}>
-      <Routes />
-    </ThemeProvider>
+    <TempModeContext.Provider value={tempModeContext}>
+      <ColorModeContext.Provider value={colorModeContext}>
+        <ThemeProvider theme={theme}>
+          <Routes />
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </TempModeContext.Provider>
   )
 }
 

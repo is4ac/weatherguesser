@@ -1,7 +1,9 @@
-import { Box } from '@mui/material'
+import { Box, Theme, useTheme } from '@mui/material'
 import React from 'react'
 
 const GoogleMap = ({ location }: { location: string }): JSX.Element => {
+  const theme = useTheme<Theme>()
+
   let params = `key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&q=${location.replace(' ', '+')}`
 
   return (
@@ -25,7 +27,7 @@ const GoogleMap = ({ location }: { location: string }): JSX.Element => {
         title='Map'
         width='525'
         height='400'
-        style={{ border: '0' }}
+        style={{ border: '0', filter: theme.palette.mode === 'dark' ? 'invert(90%)' : undefined }}
         loading='lazy'
         allowFullScreen
         src={`https://www.google.com/maps/embed/v1/place?${params}`}
