@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const mongoose = require('mongoose')
 const cron = require('node-cron')
 const methods = require('./lib/lib')
@@ -21,7 +22,7 @@ connection.once('open', () => {
 })
 
 // Set up routes
-const temperaturesRouter = require('./routes/temperatures')
+const temperaturesRouter = require(path.join(__dirname, 'api', 'routes', 'temperatures'))
 app.use('/temperatures', temperaturesRouter)
 
 // Set up scheduled updates of city temperature data
@@ -30,6 +31,13 @@ console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV !== 'development') {
   cron.schedule('*/6 * * * * *', () => {
     methods.updateCityTemps()
+  })
+} 
+// static files (build of frontend)
+else if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend', 'build')));
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend', 'build', 'index.html'));
   })
 }
 

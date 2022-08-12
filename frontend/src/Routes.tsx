@@ -4,7 +4,7 @@ import TempGuessGame from './pages/TempGuessGame'
 
 export default function Routes(): JSX.Element {
   return (
-    <Router>
+    <Router basename='/'>
       <Switch>
         <Route path='/' exact>
           <TempGuessGame />
