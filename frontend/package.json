@@ -1,5 +1,6 @@
 {
-  "name": "weatherguessr",
+  "homepage": "https://weatherguesser.isaacsung.net",
+  "name": "weatherguesser",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
