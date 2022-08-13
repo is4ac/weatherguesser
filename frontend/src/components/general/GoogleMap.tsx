@@ -3,8 +3,9 @@ import React from 'react'
 
 const GoogleMap = ({ location }: { location: string }): JSX.Element => {
   const theme = useTheme<Theme>()
+  const googleMapsKey = 'AIzaSyBmOybe2xJQa8qhC4j1pw-UQrSHc6HdWlk'
 
-  let params = `key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&q=${location.replace(' ', '+')}`
+  let params = `key=${googleMapsKey}&q=${location.replace(' ', '+')}`
 
   return (
     <Box

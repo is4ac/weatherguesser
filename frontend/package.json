@@ -13,7 +13,6 @@
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.4",
-    "env-cmd": "^10.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
@@ -21,11 +20,11 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "env-cmd -f .env react-scripts start",
-    "build": "REACT_APP_ENV=production env-cmd -f .env react-scripts build",
+    "start": "react-scripts start",
+    "build": "REACT_APP_ENV=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "REACT_APP_ENV=development env-cmd -f .env.local react-scripts start"
+    "dev": "REACT_APP_ENV=development react-scripts start"
   },
   "eslintConfig": {
     "extends": [
