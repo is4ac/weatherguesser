@@ -1,5 +1,5 @@
 const router = require('express').Router();
-let Temperature = require('../models/temperature.model');
+let Temperature = require('../../models/temperature.model');
 
 // Get city, country temp
 router.route('/').get((req, res) => {

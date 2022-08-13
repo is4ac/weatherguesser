@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Typography } from '@mui/material'
 import React from 'react'
-import GameRound from 'src/model/game-round'
+import GameRound from '../../model/game-round'
 
 const GameOver = ({
   gameRound,

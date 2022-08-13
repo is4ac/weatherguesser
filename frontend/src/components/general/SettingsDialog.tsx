@@ -14,8 +14,8 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useContext } from 'react'
-import { ColorModeContext, lighterPalette, darkPalette } from 'src/styles/theme'
-import { TempModeContext } from 'src/contexts'
+import { ColorModeContext, lighterPalette, darkPalette } from '../../styles/theme'
+import { TempModeContext } from '../../contexts'
 
 const SettingsDialog = ({ open, onClose }: { open: boolean; onClose: () => void }): JSX.Element => {
   const theme = useTheme<Theme>()
