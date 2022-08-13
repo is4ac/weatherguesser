@@ -19,7 +19,7 @@ const TempGuessGame = (): JSX.Element => {
   if (process.env.REACT_APP_ENV === 'development') {
     prefix = 'http://localhost:3000/'
   } else {
-    prefix = 'https://weatherguesser.isaacsung.net/'
+    prefix = 'https://weatherguesser.vercel.app/'
   }
 
   const gameRoundRef = useRef(new GameRound())
