@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { Box } from '@mui/material'
-import Results from 'src/components/temp-guesser/Results'
-import CityPrompt from 'src/components/temp-guesser/CityPrompt'
-import GameRound from 'src/model/game-round'
-import GameOver from 'src/components/general/GameOver'
-import Layout from 'src/components/page-parts/Layout'
-import GoogleMap from 'src/components/general/GoogleMap'
-import TempGuessForm from 'src/components/temp-guesser/TempGuessForm'
-import ScoreDisplay from 'src/components/general/ScoreDisplay'
-import CityStepper from 'src/components/general/CityStepper'
+import Results from '../components/temp-guesser/Results'
+import CityPrompt from '../components/temp-guesser/CityPrompt'
+import GameRound from '../model/game-round'
+import GameOver from '../components/general/GameOver'
+import Layout from '../components/page-parts/Layout'
+import GoogleMap from '../components/general/GoogleMap'
+import TempGuessForm from '../components/temp-guesser/TempGuessForm'
+import ScoreDisplay from '../components/general/ScoreDisplay'
+import CityStepper from '../components/general/CityStepper'
 
 const steps = new Array(GameRound.NUM_CITIES).fill('c')
 
@@ -17,9 +17,9 @@ const TempGuessGame = (): JSX.Element => {
   // check if in development mode
   let prefix = ''
   if (process.env.REACT_APP_ENV === 'development') {
-    prefix = 'http://localhost:5000/'
+    prefix = 'http://localhost:3000/'
   } else {
-    prefix = 'https://weatherguesser.isaacsung.net/api/'
+    prefix = 'https://weatherguesser.isaacsung.net/'
   }
 
   const gameRoundRef = useRef(new GameRound())

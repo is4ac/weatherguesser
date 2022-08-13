@@ -2,6 +2,7 @@ import Slider from '@mui/material/Slider'
 import { Mark } from '@mui/base'
 import { Stack } from '@mui/material'
 import IntegerTextField from './IntegerTextField'
+import React from 'react'
 
 const InputSlider = ({
   marks,
