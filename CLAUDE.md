@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-WeatherGuesser is a weather-related guessing game built with SvelteKit and TypeScript. The app is deployed on Vercel and includes Google Maps integration.
+WeatherGuesser is a weather-related guessing game built with TanStack Start, React, and Mantine UI. The app uses Tailwind CSS for additional styling and is deployed on Vercel.
 
 ## Development Commands
 
@@ -12,8 +12,11 @@ WeatherGuesser is a weather-related guessing game built with SvelteKit and TypeS
 # Start development server
 npm run dev
 
-# Build for production
+# Build for production  
 npm run build
+
+# Start production server
+npm run start
 
 # Run all tests (unit + integration)
 npm run test
@@ -30,30 +33,41 @@ npm run check
 # Linting and formatting
 npm run lint
 npm run format
+
+# Generate route tree (automatically done on dev/build)
+npm run routes:generate
 ```
 
 ## Architecture
 
-- **Framework**: SvelteKit with TypeScript and Vite
-- **Styling**: Tailwind CSS (configured in `/src/app.css`)
-- **Routes**: File-based routing in `/src/routes/`
-- **Components**: Shared utilities in `/src/lib/` (accessible via `$lib` imports)
+- **Framework**: TanStack Start with React and TypeScript
+- **UI Library**: Mantine UI components with Tailwind CSS integration
+- **Build Tool**: Vinxi (Vite-based) with TanStack Start configuration
+- **Routing**: File-based routing with TanStack Router in `/src/routes/`
+- **Styling**: Mantine UI + Tailwind CSS (Tailwind preflight disabled to avoid conflicts)
 - **Testing**: Vitest for unit tests, Playwright for integration tests
-- **Deployment**: Uses `@sveltejs/adapter-auto` for automatic platform detection
 
 ## Key Directories
 
-- `/src/routes/` - SvelteKit pages and layouts
-- `/src/lib/` - Reusable components and utilities  
+- `/src/routes/` - TanStack Router file-based routes
+- `/src/components/` - Reusable React components
+- `/src/styles/` - Global CSS and styling
 - `/tests/` - Playwright integration tests
 - `/static/` - Static assets served from root
 
+## Tech Stack Integration
+
+- **Mantine + Tailwind**: Mantine provides component library, Tailwind for utilities
+- **PostCSS**: Configured with `postcss-preset-mantine` for Mantine variables
+- **TanStack Router**: Auto-generates route tree in `/src/routeTree.gen.ts`
+- **Client/Server**: Split architecture with `/src/client.tsx` and `/src/server.tsx`
+
 ## Testing Setup
 
-- Unit tests: Place `*.test.ts` files alongside source code in `/src/`
+- Unit tests: Place `*.test.tsx` files alongside source code in `/src/`
 - Integration tests: Write Playwright tests in `/tests/` directory
-- Playwright automatically starts dev server on port 4173 for E2E testing
+- Playwright automatically starts dev server for E2E testing
 
 ## Current State
 
-The project was recently migrated to SvelteKit. Main functionality appears to be a weather guessing game with Google Maps integration, though current pages show placeholder content.
+Recently migrated from SvelteKit to TanStack Start. Basic UI structure implemented with Mantine components and Tailwind styling. Ready for weather guessing game functionality development.
