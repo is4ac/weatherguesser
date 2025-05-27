@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { Container, Title, Text, Button, Stack, Card } from '@mantine/core';
 
 export const Route = createFileRoute('/')({
@@ -24,11 +24,17 @@ function WeatherGuesser() {
 							Welcome to WeatherGuesser
 						</Title>
 						<Text>
-							This app is currently being migrated to TanStack Start with Mantine UI. Soon you'll be
-							able to guess weather conditions from various locations!
+							Test your ability to guess the current temperature in cities around the world! 
+							Each round presents you with 5 random cities. Get closer to the actual temperature to earn more points.
 						</Text>
-						<Button variant="filled" size="lg" className="bg-blue-500 hover:bg-blue-600">
-							Start Guessing (Coming Soon)
+						<Button 
+							component={Link}
+							to="/game"
+							variant="filled" 
+							size="lg" 
+							className="bg-blue-500 hover:bg-blue-600"
+						>
+							Start Playing Temperature Guesser
 						</Button>
 					</Stack>
 				</Card>
