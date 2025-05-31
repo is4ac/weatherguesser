@@ -2,9 +2,9 @@ import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } fro
 import { HeadContent, Link, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import type * as React from 'react';
-import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
-import { NotFound } from '~/components/NotFound';
-import { seo } from '~/utils/seo';
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary';
+import { NotFound } from '@/components/NotFound';
+import { seo } from '@/utils/seo';
 import css from './__root.css?url';
 
 const theme = createTheme({

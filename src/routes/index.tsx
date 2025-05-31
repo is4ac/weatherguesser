@@ -5,7 +5,7 @@ export const Route = createFileRoute('/')({
 	component: () => <WeatherGuesser />
 });
 
-function WeatherGuesser() {
+export function WeatherGuesser() {
 	return (
 		<Container size="md" py="xl">
 			<Stack gap="xl">
@@ -24,14 +24,15 @@ function WeatherGuesser() {
 							Welcome to WeatherGuesser
 						</Title>
 						<Text>
-							Test your ability to guess the current temperature in cities around the world! 
-							Each round presents you with 5 random cities. Get closer to the actual temperature to earn more points.
+							Test your ability to guess the current temperature in cities around the world! Each
+							round presents you with 5 random cities. Get closer to the actual temperature to earn
+							more points.
 						</Text>
-						<Button 
+						<Button
 							component={Link}
 							to="/game"
-							variant="filled" 
-							size="lg" 
+							variant="filled"
+							size="lg"
 							className="bg-blue-500 hover:bg-blue-600"
 						>
 							Start Playing Temperature Guesser
