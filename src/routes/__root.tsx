@@ -1,17 +1,26 @@
 import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } from '@mantine/core';
-import { HeadContent, Link, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
+import {
+	HeadContent,
+	Link,
+	Outlet,
+	Scripts,
+	createRootRouteWithContext
+} from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import type * as React from 'react';
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary';
 import { NotFound } from '@/components/NotFound';
 import { seo } from '@/utils/seo';
 import css from './__root.css?url';
+import { QueryClient } from '@tanstack/react-query';
 
 const theme = createTheme({
 	/** Put your mantine theme override here */
 });
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+	queryClient: QueryClient;
+}>()({
 	head: () => ({
 		meta: [
 			{

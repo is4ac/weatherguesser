@@ -10,16 +10,16 @@ export default defineConfig({
 		appDirectory: 'src'
 	},
 	// if don't want to use cloudflare, use this setting instead
-	// server: {
-	// 	preset: 'node-server',
-	// },
 	server: {
-		preset: 'cloudflare-pages',
-		unenv: cloudflare
+		preset: 'node-server'
 	},
+	// server: {
+	// 	preset: 'cloudflare-pages',
+	// 	unenv: cloudflare
+	// },
 	vite: {
 		plugins: [
-			removeConsole(),
+			// removeConsole(),
 			svgr(),
 			ViteImageOptimizer(),
 			tsConfigPaths({

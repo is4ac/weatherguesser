@@ -1,16 +1,18 @@
 export interface City {
-  name: string
-  country: string
-  temp: number
+	name: string;
+	country: string;
+	temp: number;
+	lat: number;
+	lon: number;
 }
 
 export interface LeaderboardEntry {
-  name: string
-  score: number
-  accuracy: number
-  streak: number
-  date: string
+	name: string;
+	score: number;
+	accuracy: number;
+	streak: number;
+	date: string;
 }
 
-export type GameState = "playing" | "correct" | "wrong"
-export type TemperatureUnit = "celsius" | "fahrenheit"
+export type GameState = 'playing' | 'correct' | 'wrong';
+export type TemperatureUnit = 'celsius' | 'fahrenheit';

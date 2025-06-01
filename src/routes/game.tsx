@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Button, Badge, Card, Text } from '@mantine/core';
+import { useState } from 'react';
+import { Button, Badge, Card, Text, Skeleton } from '@mantine/core';
 import { MapPin, RotateCcw } from 'lucide-react';
 import type { City, GameState, TemperatureUnit } from '@/types';
-import { getRandomCity, convertToCelsius } from '@/utils';
+import { convertToCelsius } from '@/utils';
 import { LeaderboardModal } from '@/components/leaderboard-modal';
 import { UnitToggle } from '@/components/unit-toggle';
 import { WeatherIcon } from '@/components/weather-icon';
@@ -11,32 +11,54 @@ import { GameFeedback } from '@/components/game-feedback';
 import { GameStats } from '@/components/game-stats';
 import { Instructions } from '@/components/instructions';
 import { createFileRoute } from '@tanstack/react-router';
-import { WeatherGuesser } from '.';
+import { cityQueries } from '@/operations/city';
+import { useSuspenseQueries } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/game')({
-	component: () => <GameComponent />
+	component: () => <GameComponent />,
+	beforeLoad: async ({ context }) => {
+		await context.queryClient.ensureQueryData(cityQueries.single(0));
+		await context.queryClient.ensureQueryData(cityQueries.single(1));
+		await context.queryClient.ensureQueryData(cityQueries.single(2));
+		await context.queryClient.ensureQueryData(cityQueries.single(3));
+		await context.queryClient.ensureQueryData(cityQueries.single(4));
+	}
 });
 
 function GameComponent() {
-	const [currentCity, setCurrentCity] = useState<City>(getRandomCity());
 	const [guess, setGuess] = useState('');
 	const [score, setScore] = useState(0);
 	const [attempts, setAttempts] = useState(0);
+	const [step, setStep] = useState(0);
 	const [feedback, setFeedback] = useState('');
 	const [gameState, setGameState] = useState<GameState>('playing');
 	const [streak, setStreak] = useState(0);
 	const [unit, setUnit] = useState<TemperatureUnit>('celsius');
+	const cities = useSuspenseQueries({
+		queries: [
+			cityQueries.single(0),
+			cityQueries.single(1),
+			cityQueries.single(2),
+			cityQueries.single(3),
+			cityQueries.single(4)
+		]
+	});
+	const [currentCity, setCurrentCity] = useState<City>(cities[step]?.data);
 
 	const accuracy = attempts > 0 ? Math.round((score / (attempts * 10)) * 100) : 0;
 
 	const handleGuess = () => {
+		if (!currentCity) {
+			return;
+		}
+
 		const guessNum = Number.parseInt(guess);
 		if (isNaN(guessNum)) return;
 
 		// Convert guess to celsius for comparison if needed
 		const guessInCelsius = unit === 'fahrenheit' ? convertToCelsius(guessNum) : guessNum;
 		const difference = Math.abs(guessInCelsius - currentCity.temp);
-		setAttempts(attempts + 1);
+		setAttempts((prev) => prev + 1);
 
 		if (difference === 0) {
 			setFeedback('🎯 Perfect! Exactly right!');
@@ -66,25 +88,23 @@ function GameComponent() {
 	};
 
 	const nextCity = () => {
-		setCurrentCity(getRandomCity());
 		setGuess('');
 		setGameState('playing');
 		setFeedback('');
+		setCurrentCity(cities[step + 1]?.data);
+		setStep((prev) => prev + 1);
 	};
 
 	const resetGame = () => {
 		setScore(0);
 		setAttempts(0);
+		setStep(0);
 		setStreak(0);
-		setCurrentCity(getRandomCity());
 		setGuess('');
 		setGameState('playing');
 		setFeedback('');
+		setCurrentCity(cities[0]?.data ?? null);
 	};
-
-	useEffect(() => {
-		setCurrentCity(getRandomCity());
-	}, []);
 
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-600 via-sky-500 to-blue-700 p-4">
@@ -115,45 +135,51 @@ function GameComponent() {
 
 				{/* Main Game Card */}
 				<Card className="border-white/20 bg-white/10 shadow-2xl backdrop-blur-md">
-					<div className="pb-4 text-center">
-						<div className="mb-2 flex items-center justify-center gap-2">
-							<MapPin className="h-5 w-5 text-white" />
-							<Text className="text-2xl font-bold text-white">{currentCity.name}</Text>
-						</div>
-						<Badge variant="secondary" className="border-white/30 bg-white/20 text-white">
-							{currentCity.country}
-						</Badge>
-					</div>
+					{currentCity ? (
+						<>
+							<div className="pb-4 text-center">
+								<div className="mb-2 flex items-center justify-center gap-2">
+									<MapPin className="h-5 w-5 text-white" />
+									<Text className="text-2xl font-bold text-white">{currentCity.name}</Text>
+								</div>
+								<Badge variant="secondary" className="border-white/30 bg-white/20 text-white">
+									{currentCity.country}
+								</Badge>
+							</div>
 
-					<Card.Section className="space-y-6">
-						{/* Weather Icon Display */}
-						<WeatherIcon temperature={currentCity.temp} />
+							<Card.Section className="space-y-6">
+								{/* Weather Icon Display */}
+								<WeatherIcon temperature={currentCity.temp} />
 
-						{/* Game State Display */}
-						{gameState === 'playing' && (
-							<TemperatureInput
-								guess={guess}
-								unit={unit}
-								cityName={currentCity.name}
-								onGuessChange={setGuess}
-								onSubmitGuess={handleGuess}
-							/>
-						)}
+								{/* Game State Display */}
+								{gameState === 'playing' && (
+									<TemperatureInput
+										guess={guess}
+										unit={unit}
+										cityName={currentCity.name}
+										onGuessChange={setGuess}
+										onSubmitGuess={handleGuess}
+									/>
+								)}
 
-						{/* Feedback Display */}
-						{(gameState === 'correct' || gameState === 'wrong') && (
-							<GameFeedback
-								feedback={feedback}
-								actualTemp={currentCity.temp}
-								guess={guess}
-								unit={unit}
-								onNextCity={nextCity}
-							/>
-						)}
+								{/* Feedback Display */}
+								{(gameState === 'correct' || gameState === 'wrong') && (
+									<GameFeedback
+										feedback={feedback}
+										actualTemp={currentCity.temp}
+										guess={guess}
+										unit={unit}
+										onNextCity={nextCity}
+									/>
+								)}
 
-						{/* Game Stats */}
-						<GameStats attempts={attempts} score={score} streak={streak} />
-					</Card.Section>
+								{/* Game Stats */}
+								<GameStats attempts={attempts} score={score} streak={streak} />
+							</Card.Section>
+						</>
+					) : (
+						<Skeleton />
+					)}
 				</Card>
 
 				{/* Instructions */}
