@@ -11,17 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as GameImport } from './routes/game'
 import { Route as PathlessLayoutImport } from './routes/_pathlessLayout'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
-
-const GameRoute = GameImport.update({
-  id: '/game',
-  path: '/game',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const PathlessLayoutRoute = PathlessLayoutImport.update({
   id: '/_pathlessLayout',
@@ -52,13 +45,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PathlessLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/game': {
-      id: '/game'
-      path: '/game'
-      fullPath: '/game'
-      preLoaderRoute: typeof GameImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -67,41 +53,36 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof PathlessLayoutRoute
-  '/game': typeof GameRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof PathlessLayoutRoute
-  '/game': typeof GameRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_pathlessLayout': typeof PathlessLayoutRoute
-  '/game': typeof GameRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/game'
+  fullPaths: '/' | ''
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/game'
-  id: '__root__' | '/' | '/_pathlessLayout' | '/game'
+  to: '/' | ''
+  id: '__root__' | '/' | '/_pathlessLayout'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PathlessLayoutRoute: typeof PathlessLayoutRoute
-  GameRoute: typeof GameRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PathlessLayoutRoute: PathlessLayoutRoute,
-  GameRoute: GameRoute,
 }
 
 export const routeTree = rootRoute
@@ -115,8 +96,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_pathlessLayout",
-        "/game"
+        "/_pathlessLayout"
       ]
     },
     "/": {
@@ -124,9 +104,6 @@ export const routeTree = rootRoute
     },
     "/_pathlessLayout": {
       "filePath": "_pathlessLayout.tsx"
-    },
-    "/game": {
-      "filePath": "game.tsx"
     }
   }
 }
