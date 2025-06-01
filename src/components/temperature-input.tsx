@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { Button, TextInput } from '@mantine/core';
+import { Button, NumberInput } from '@mantine/core';
 import { Thermometer } from 'lucide-react';
 import type { TemperatureUnit } from '../types';
 
@@ -21,7 +21,7 @@ export function TemperatureInput({
 }: TemperatureInputProps) {
 	const getUnitSymbol = () => (unit === 'fahrenheit' ? '°F' : '°C');
 
-	const handleKeyPress = (e: React.KeyboardEvent) => {
+	const handleKeyUp = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
 			onSubmitGuess();
 		}
@@ -36,13 +36,12 @@ export function TemperatureInput({
 
 			<div className="flex gap-2">
 				<div className="relative flex-1">
-					<TextInput
-						type="number"
+					<NumberInput
 						value={guess}
-						onChange={(e) => onGuessChange(e.target.value)}
+						onChange={(value) => onGuessChange(value + '')}
 						placeholder={`Enter temperature in ${getUnitSymbol()}`}
 						className="border-white/30 bg-white/20 pr-12 text-white placeholder:text-white/60"
-						onKeyPress={handleKeyPress}
+						onKeyUp={handleKeyUp}
 					/>
 					<div className="absolute top-1/2 right-3 -translate-y-1/2 transform">
 						<Thermometer className="h-4 w-4 text-white/60" />

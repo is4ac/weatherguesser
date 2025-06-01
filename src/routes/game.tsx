@@ -147,7 +147,7 @@ function GameComponent() {
 								</Badge>
 							</div>
 
-							<Card.Section className="space-y-6">
+							<Card.Section className="space-y-6 px-4">
 								{/* Weather Icon Display */}
 								<WeatherIcon temperature={currentCity.temp} />
 
