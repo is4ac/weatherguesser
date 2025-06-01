@@ -33,7 +33,7 @@ function GameComponent() {
 	const [feedback, setFeedback] = useState('');
 	const [gameState, setGameState] = useState<GameState>('playing');
 	const [streak, setStreak] = useState(0);
-	const [unit, setUnit] = useState<TemperatureUnit>('celsius');
+	const [unit, setUnit] = useState<TemperatureUnit>('fahrenheit');
 	const cities = useSuspenseQueries({
 		queries: [
 			cityQueries.single(0),
@@ -88,6 +88,12 @@ function GameComponent() {
 	};
 
 	const nextCity = () => {
+		if (step === 4) {
+			// TODO: game over
+
+			return;
+		}
+
 		setGuess('');
 		setGameState('playing');
 		setFeedback('');

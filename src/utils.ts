@@ -29,22 +29,31 @@ export const cities = [
 	{ name: 'Vancouver', country: 'Canada', temp: 12, lat: 49.2608724, lon: -123.113952 }
 ];
 
-function random(seed: number, steps: number) {
-	var x = Math.tan(seed++) * 10000;
+function random(seed: number, step: number) {
+	const numbers: Record<number, boolean> = {};
 
-	for (let i = 0; i < steps; i++) {
+	let x = Math.tan(seed++) * 10000;
+	let randNumber = Math.floor((x - Math.floor(x)) * cities.length);
+	numbers[randNumber] = true;
+	let i = 0;
+
+	while (i < step) {
 		x = Math.tan(seed++) * 10000;
+		randNumber = Math.floor((x - Math.floor(x)) * cities.length);
+		if (!(randNumber in numbers)) {
+			numbers[randNumber] = true;
+			i++;
+		}
 	}
 
-	return x - Math.floor(x);
+	return randNumber;
 }
 
 export const getRandomCity = (step: number) => {
 	const dateSeed = new Date();
-	const randomIndex = Math.floor(
-		random(parseInt(`${dateSeed.getDay()}${dateSeed.getMonth()}${dateSeed.getFullYear()}`), step) *
-			cities.length
+	const randomIndex = random(
+		parseInt(`${dateSeed.getDay()}${dateSeed.getMonth()}${dateSeed.getFullYear()}`),
+		step
 	);
-
 	return cities[randomIndex] as City;
 };

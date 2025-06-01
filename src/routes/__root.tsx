@@ -89,27 +89,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				<MantineProvider theme={theme}>
-					<div className="flex gap-2 p-2 text-lg">
-						<Link
-							to="/"
-							activeProps={{
-								className: 'font-bold'
-							}}
-							activeOptions={{ exact: true }}
-						>
-							Home
-						</Link>{' '}
-						<Link
-							// @ts-expect-error
-							to="/this-route-does-not-exist"
-							activeProps={{
-								className: 'font-bold'
-							}}
-						>
-							This Route Does Not Exist
-						</Link>
-					</div>
-					<hr />
 					{children}
 					<TanStackRouterDevtools position="bottom-right" />
 					<Scripts />
