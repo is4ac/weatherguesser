@@ -1,24 +1,20 @@
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { useState } from 'react';
-import { Button, Badge, Card, Text, Skeleton } from '@mantine/core';
-import { MapPin, RotateCcw } from 'lucide-react';
+import { Button, Card, Skeleton } from '@mantine/core';
+import { RotateCcw } from 'lucide-react';
 import type { City, GameState, TemperatureUnit } from '@/types';
 import { convertToCelsius } from '@/utils';
 import { LeaderboardModal } from '@/components/leaderboard-modal';
 import { UnitToggle } from '@/components/unit-toggle';
-import { WeatherIcon } from '@/components/weather-icon';
-import { TemperatureInput } from '@/components/temperature-input';
-import { GameFeedback } from '@/components/game-feedback';
-import { GameStats } from '@/components/game-stats';
 import { Instructions } from '@/components/instructions';
-import { createFileRoute, redirect } from '@tanstack/react-router';
 import { cityQueries } from '@/operations/city';
 import { useSuspenseQueries } from '@tanstack/react-query';
 
-export const Route = createFileRoute('/')({
-	beforeLoad: () => redirect({ to: '/cities' })
+export const Route = createFileRoute('/cities/$city')({
+	component: CityLayoutComponent
 });
 
-function GameComponent() {
+function CityLayoutComponent() {
 	const [guess, setGuess] = useState('');
 	const [score, setScore] = useState(0);
 	const [attempts, setAttempts] = useState(0);
@@ -83,7 +79,6 @@ function GameComponent() {
 	const nextCity = () => {
 		if (step === 4) {
 			// TODO: game over
-
 			return;
 		}
 
@@ -134,51 +129,7 @@ function GameComponent() {
 
 				{/* Main Game Card */}
 				<Card className="border-white/20 bg-white/10 shadow-2xl backdrop-blur-md">
-					{currentCity ? (
-						<>
-							<div className="pb-4 text-center">
-								<div className="mb-2 flex items-center justify-center gap-2">
-									<MapPin className="h-5 w-5 text-white" />
-									<Text className="text-2xl font-bold text-white">{currentCity.name}</Text>
-								</div>
-								<Badge variant="secondary" className="border-white/30 bg-white/20 text-white">
-									{currentCity.country}
-								</Badge>
-							</div>
-
-							<Card.Section className="space-y-6 px-4">
-								{/* Weather Icon Display */}
-								<WeatherIcon temperature={currentCity.temp} />
-
-								{/* Game State Display */}
-								{gameState === 'playing' && (
-									<TemperatureInput
-										guess={guess}
-										unit={unit}
-										cityName={currentCity.name}
-										onGuessChange={setGuess}
-										onSubmitGuess={handleGuess}
-									/>
-								)}
-
-								{/* Feedback Display */}
-								{(gameState === 'correct' || gameState === 'wrong') && (
-									<GameFeedback
-										feedback={feedback}
-										actualTemp={currentCity.temp}
-										guess={guess}
-										unit={unit}
-										onNextCity={nextCity}
-									/>
-								)}
-
-								{/* Game Stats */}
-								<GameStats attempts={attempts} score={score} streak={streak} />
-							</Card.Section>
-						</>
-					) : (
-						<Skeleton />
-					)}
+					{currentCity ? <Outlet /> : <Skeleton />}
 				</Card>
 
 				{/* Instructions */}

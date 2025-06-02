@@ -12,6 +12,9 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as CitiesIndexImport } from './routes/cities/index'
+import { Route as CitiesCityImport } from './routes/cities/$city'
+import { Route as CitiesCityIndexImport } from './routes/cities/$city/index'
 
 // Create/Update Routes
 
@@ -19,6 +22,24 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const CitiesIndexRoute = CitiesIndexImport.update({
+  id: '/cities/',
+  path: '/cities/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CitiesCityRoute = CitiesCityImport.update({
+  id: '/cities/$city',
+  path: '/cities/$city',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CitiesCityIndexRoute = CitiesCityIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CitiesCityRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -32,39 +53,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/cities/$city': {
+      id: '/cities/$city'
+      path: '/cities/$city'
+      fullPath: '/cities/$city'
+      preLoaderRoute: typeof CitiesCityImport
+      parentRoute: typeof rootRoute
+    }
+    '/cities/': {
+      id: '/cities/'
+      path: '/cities'
+      fullPath: '/cities'
+      preLoaderRoute: typeof CitiesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/cities/$city/': {
+      id: '/cities/$city/'
+      path: '/'
+      fullPath: '/cities/$city/'
+      preLoaderRoute: typeof CitiesCityIndexImport
+      parentRoute: typeof CitiesCityImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface CitiesCityRouteChildren {
+  CitiesCityIndexRoute: typeof CitiesCityIndexRoute
+}
+
+const CitiesCityRouteChildren: CitiesCityRouteChildren = {
+  CitiesCityIndexRoute: CitiesCityIndexRoute,
+}
+
+const CitiesCityRouteWithChildren = CitiesCityRoute._addFileChildren(
+  CitiesCityRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cities/$city': typeof CitiesCityRouteWithChildren
+  '/cities': typeof CitiesIndexRoute
+  '/cities/$city/': typeof CitiesCityIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cities': typeof CitiesIndexRoute
+  '/cities/$city': typeof CitiesCityIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/cities/$city': typeof CitiesCityRouteWithChildren
+  '/cities/': typeof CitiesIndexRoute
+  '/cities/$city/': typeof CitiesCityIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/cities/$city' | '/cities' | '/cities/$city/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/cities' | '/cities/$city'
+  id: '__root__' | '/' | '/cities/$city' | '/cities/' | '/cities/$city/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CitiesCityRoute: typeof CitiesCityRouteWithChildren
+  CitiesIndexRoute: typeof CitiesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CitiesCityRoute: CitiesCityRouteWithChildren,
+  CitiesIndexRoute: CitiesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +143,26 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/cities/$city",
+        "/cities/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/cities/$city": {
+      "filePath": "cities/$city.tsx",
+      "children": [
+        "/cities/$city/"
+      ]
+    },
+    "/cities/": {
+      "filePath": "cities/index.tsx"
+    },
+    "/cities/$city/": {
+      "filePath": "cities/$city/index.tsx",
+      "parent": "/cities/$city"
     }
   }
 }
