@@ -15,9 +15,13 @@ export function Instructions({ unit }: InstructionsProps) {
 						• Guess the current temperature in {unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}
 					</li>
 					<li>• Perfect guess: 10 points</li>
-					<li>• Within 2°C: 7 points</li>
-					<li>• Within 5°C: 5 points</li>
-					<li>• Within 10°C: 2 points</li>
+					<li>• Within 2°C / ~4°F: 7 points</li>
+					<li>• Within 5°C / ~9°F: 5 points</li>
+					<li>• Within 10°C / ~18°F: 2 points</li>
+					<li>
+						<strong>Note</strong>: In Fahrenheit mode, these numbers can be slightly off due to
+						rounding
+					</li>
 				</ul>
 			</Card.Section>
 		</Card>

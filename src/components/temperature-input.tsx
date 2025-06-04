@@ -40,6 +40,7 @@ export function TemperatureInput({
 						value={guess}
 						onChange={(value) => onGuessChange(value + '')}
 						placeholder={`Enter temperature in ${getUnitSymbol()}`}
+						size="md"
 						className="border-white/30 bg-white/20 pr-12 text-white placeholder:text-white/60"
 						onKeyUp={handleKeyUp}
 					/>
@@ -49,6 +50,7 @@ export function TemperatureInput({
 				</div>
 				<Button
 					onClick={onSubmitGuess}
+					size="md"
 					disabled={!guess}
 					className="border-white/30 bg-white/20 text-white hover:bg-white/30"
 				>

@@ -9,8 +9,9 @@ interface UnitToggleProps {
 export function UnitToggle({ unit, onUnitChange }: UnitToggleProps) {
 	return (
 		<Card className="border-white/20 bg-white/10 backdrop-blur-md">
-			<Card.Section className="py-4">
-				<div className="flex items-center justify-center gap-4">
+			<Card.Section className="p-4">
+				<div className="flex items-center justify-start gap-3 text-white">
+					Mode:
 					<Switch
 						size="xl"
 						offLabel="°C"

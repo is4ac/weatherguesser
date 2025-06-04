@@ -4,6 +4,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { DefaultCatchBoundary } from './components/DefaultCatchBoundary';
 import { NotFound } from './components/NotFound';
 import { routeTree } from './routeTree.gen';
+import { Skeleton } from '@mantine/core';
 
 export function createRouter() {
 	const queryClient = new QueryClient();
@@ -14,7 +15,8 @@ export function createRouter() {
 			context: { queryClient },
 			defaultPreload: 'intent',
 			defaultErrorComponent: DefaultCatchBoundary,
-			defaultNotFoundComponent: () => <NotFound />
+			defaultNotFoundComponent: () => <NotFound />,
+			defaultPendingComponent: () => <Skeleton className="h-10 w-full" />
 		}),
 		queryClient
 	);

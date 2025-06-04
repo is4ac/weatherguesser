@@ -9,7 +9,6 @@ export interface City {
 export interface LeaderboardEntry {
 	name: string;
 	score: number;
-	accuracy: number;
 	streak: number;
 	date: string;
 }

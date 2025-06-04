@@ -1,7 +1,7 @@
 import { City } from './types';
 
 export const convertToFahrenheit = (celsius: number) => Math.round((celsius * 9) / 5 + 32);
-export const convertToCelsius = (fahrenheit: number) => Math.round(((fahrenheit - 32) * 5) / 9);
+export const convertToCelsius = (fahrenheit: number) => ((fahrenheit - 32) * 5) / 9;
 
 export const getTemperatureColor = (temp: number) => {
 	if (temp < 0) return 'from-blue-600 to-blue-800';

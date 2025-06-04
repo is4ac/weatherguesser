@@ -13,7 +13,6 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as CitiesIndexImport } from './routes/cities/index'
-import { Route as CitiesCityImport } from './routes/cities/$city'
 import { Route as CitiesCityIndexImport } from './routes/cities/$city/index'
 
 // Create/Update Routes
@@ -30,16 +29,10 @@ const CitiesIndexRoute = CitiesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CitiesCityRoute = CitiesCityImport.update({
-  id: '/cities/$city',
-  path: '/cities/$city',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const CitiesCityIndexRoute = CitiesCityIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => CitiesCityRoute,
+  id: '/cities/$city/',
+  path: '/cities/$city/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -53,13 +46,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/cities/$city': {
-      id: '/cities/$city'
-      path: '/cities/$city'
-      fullPath: '/cities/$city'
-      preLoaderRoute: typeof CitiesCityImport
-      parentRoute: typeof rootRoute
-    }
     '/cities/': {
       id: '/cities/'
       path: '/cities'
@@ -69,33 +55,20 @@ declare module '@tanstack/react-router' {
     }
     '/cities/$city/': {
       id: '/cities/$city/'
-      path: '/'
-      fullPath: '/cities/$city/'
+      path: '/cities/$city'
+      fullPath: '/cities/$city'
       preLoaderRoute: typeof CitiesCityIndexImport
-      parentRoute: typeof CitiesCityImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface CitiesCityRouteChildren {
-  CitiesCityIndexRoute: typeof CitiesCityIndexRoute
-}
-
-const CitiesCityRouteChildren: CitiesCityRouteChildren = {
-  CitiesCityIndexRoute: CitiesCityIndexRoute,
-}
-
-const CitiesCityRouteWithChildren = CitiesCityRoute._addFileChildren(
-  CitiesCityRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cities/$city': typeof CitiesCityRouteWithChildren
   '/cities': typeof CitiesIndexRoute
-  '/cities/$city/': typeof CitiesCityIndexRoute
+  '/cities/$city': typeof CitiesCityIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -107,30 +80,29 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/cities/$city': typeof CitiesCityRouteWithChildren
   '/cities/': typeof CitiesIndexRoute
   '/cities/$city/': typeof CitiesCityIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cities/$city' | '/cities' | '/cities/$city/'
+  fullPaths: '/' | '/cities' | '/cities/$city'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/cities' | '/cities/$city'
-  id: '__root__' | '/' | '/cities/$city' | '/cities/' | '/cities/$city/'
+  id: '__root__' | '/' | '/cities/' | '/cities/$city/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CitiesCityRoute: typeof CitiesCityRouteWithChildren
   CitiesIndexRoute: typeof CitiesIndexRoute
+  CitiesCityIndexRoute: typeof CitiesCityIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CitiesCityRoute: CitiesCityRouteWithChildren,
   CitiesIndexRoute: CitiesIndexRoute,
+  CitiesCityIndexRoute: CitiesCityIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -144,25 +116,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/cities/$city",
-        "/cities/"
+        "/cities/",
+        "/cities/$city/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/cities/$city": {
-      "filePath": "cities/$city.tsx",
-      "children": [
-        "/cities/$city/"
-      ]
-    },
     "/cities/": {
       "filePath": "cities/index.tsx"
     },
     "/cities/$city/": {
-      "filePath": "cities/$city/index.tsx",
-      "parent": "/cities/$city"
+      "filePath": "cities/$city/index.tsx"
     }
   }
 }

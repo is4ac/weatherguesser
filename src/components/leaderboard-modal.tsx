@@ -6,17 +6,11 @@ import type { LeaderboardEntry } from '../types';
 
 interface LeaderboardModalProps {
 	currentScore: number;
-	currentAccuracy: number;
 	currentStreak: number;
 	attempts: number;
 }
 
-export function LeaderboardModal({
-	currentScore,
-	currentAccuracy,
-	currentStreak,
-	attempts
-}: LeaderboardModalProps) {
+export function LeaderboardModal({ currentScore, currentStreak, attempts }: LeaderboardModalProps) {
 	const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 	const [showLeaderboard, { toggle, close }] = useDisclosure(false);
 	const [playerName, setPlayerName] = useState('');
@@ -27,7 +21,6 @@ export function LeaderboardModal({
 		const newEntry: LeaderboardEntry = {
 			name: playerName.trim(),
 			score: currentScore,
-			accuracy: currentAccuracy,
 			streak: currentStreak,
 			date: new Date().toLocaleDateString()
 		};
@@ -91,10 +84,6 @@ export function LeaderboardModal({
 										<div>
 											<p className="text-white/70">Score</p>
 											<p className="font-bold text-white">{currentScore}</p>
-										</div>
-										<div>
-											<p className="text-white/70">Accuracy</p>
-											<p className="font-bold text-white">{currentAccuracy}%</p>
 										</div>
 										<div>
 											<p className="text-white/70">Streak</p>
@@ -179,9 +168,7 @@ export function LeaderboardModal({
 											</div>
 											<div className="text-right">
 												<p className="text-sm font-bold text-white">{entry.score}</p>
-												<p className="text-xs text-white/60">
-													{entry.accuracy}% • {entry.streak} streak
-												</p>
+												<p className="text-xs text-white/60">{entry.streak} streak</p>
 											</div>
 										</div>
 									))}
