@@ -31,7 +31,7 @@ export const Route = createRootRouteWithContext<{
 				content: 'width=device-width, initial-scale=1'
 			},
 			...seo({
-				title: 'Weather Guesser Game',
+				title: 'Weather Guesser',
 				description: 'Guess the current temperature of random cities around the world!'
 			})
 		],
@@ -93,6 +93,15 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					<TanStackRouterDevtools position="bottom-right" />
 					<Scripts />
 				</MantineProvider>
+				<footer className="-mt-9 w-full pb-2 text-center text-sm text-white md:-mt-16 md:p-4 md:text-base">
+					Made with ❤️ by{' '}
+					<a
+						href="https://www.isaac-sung.com"
+						className="underline underline-offset-4 hover:no-underline"
+					>
+						Isaac Sung
+					</a>
+				</footer>
 			</body>
 		</html>
 	);

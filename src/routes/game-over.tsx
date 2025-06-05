@@ -21,7 +21,7 @@ function GameOverRouteComponent() {
 	};
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-600 via-sky-500 to-blue-700 p-4">
+		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-600 via-sky-500 to-blue-700 p-4 pb-12">
 			<div className="w-full max-w-md space-y-6">
 				<div className="flex items-center justify-between">
 					<LeaderboardModal currentScore={score} currentStreak={streak} attempts={MAX_ROUNDS} />
