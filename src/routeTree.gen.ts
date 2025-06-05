@@ -11,11 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as GameOverImport } from './routes/game-over'
 import { Route as IndexImport } from './routes/index'
 import { Route as CitiesIndexImport } from './routes/cities/index'
 import { Route as CitiesCityIndexImport } from './routes/cities/$city/index'
 
 // Create/Update Routes
+
+const GameOverRoute = GameOverImport.update({
+  id: '/game-over',
+  path: '/game-over',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/game-over': {
+      id: '/game-over'
+      path: '/game-over'
+      fullPath: '/game-over'
+      preLoaderRoute: typeof GameOverImport
+      parentRoute: typeof rootRoute
+    }
     '/cities/': {
       id: '/cities/'
       path: '/cities'
@@ -67,12 +81,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/game-over': typeof GameOverRoute
   '/cities': typeof CitiesIndexRoute
   '/cities/$city': typeof CitiesCityIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/game-over': typeof GameOverRoute
   '/cities': typeof CitiesIndexRoute
   '/cities/$city': typeof CitiesCityIndexRoute
 }
@@ -80,27 +96,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/game-over': typeof GameOverRoute
   '/cities/': typeof CitiesIndexRoute
   '/cities/$city/': typeof CitiesCityIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cities' | '/cities/$city'
+  fullPaths: '/' | '/game-over' | '/cities' | '/cities/$city'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cities' | '/cities/$city'
-  id: '__root__' | '/' | '/cities/' | '/cities/$city/'
+  to: '/' | '/game-over' | '/cities' | '/cities/$city'
+  id: '__root__' | '/' | '/game-over' | '/cities/' | '/cities/$city/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GameOverRoute: typeof GameOverRoute
   CitiesIndexRoute: typeof CitiesIndexRoute
   CitiesCityIndexRoute: typeof CitiesCityIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GameOverRoute: GameOverRoute,
   CitiesIndexRoute: CitiesIndexRoute,
   CitiesCityIndexRoute: CitiesCityIndexRoute,
 }
@@ -116,12 +135,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/game-over",
         "/cities/",
         "/cities/$city/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/game-over": {
+      "filePath": "game-over.tsx"
     },
     "/cities/": {
       "filePath": "cities/index.tsx"

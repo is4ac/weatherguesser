@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { WeatherIcon } from '@/components/weather-icon';
 import { TemperatureInput } from '@/components/temperature-input';
 import { GameFeedback } from '@/components/game-feedback';
@@ -6,20 +6,30 @@ import { GameStats } from '@/components/game-stats';
 import { Badge, Button, Card, Skeleton, Text } from '@mantine/core';
 import { MapPin, RotateCcw } from 'lucide-react';
 import { cityQueries } from '@/operations/city';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { City, GameState, TemperatureUnit } from '@/types';
 import { Instructions } from '@/components/instructions';
 import { LeaderboardModal } from '@/components/leaderboard-modal';
 import { UnitToggle } from '@/components/unit-toggle';
 import { useState } from 'react';
 import { convertToCelsius } from '@/utils';
+import { GameOver } from '@/components/game-over';
+import { MAX_ROUNDS, SCORE, STREAK } from '@/constants';
+import { useLocalStorage } from 'usehooks-ts';
 
 export const Route = createFileRoute('/cities/$city/')({
 	component: CityRouteComponent,
-	loader: ({ context, params }) => {
+	beforeLoad: async ({ context, params }) => {
 		const cityStep = parseInt(params.city);
 
-		context.queryClient.ensureQueryData(cityQueries.single(cityStep));
+		if (cityStep >= MAX_ROUNDS) {
+			return redirect({ to: '/game-over' });
+		}
+
+		await context.queryClient.ensureQueryData(cityQueries.single(cityStep));
+	},
+	loader: ({ params }) => {
+		const cityStep = parseInt(params.city);
 
 		return {
 			cityStep
@@ -30,15 +40,14 @@ export const Route = createFileRoute('/cities/$city/')({
 function CityRouteComponent() {
 	const navigate = useNavigate();
 	const { cityStep } = Route.useLoaderData();
-	const { data, isLoading } = useQuery(cityQueries.single(cityStep));
-	const currentCity = data as City | undefined;
+	const { data } = useSuspenseQuery(cityQueries.single(cityStep));
+	const currentCity = data as City;
 
 	const [guess, setGuess] = useState('');
-	const [score, setScore] = useState(0);
-	const [attempts, setAttempts] = useState(0);
 	const [feedback, setFeedback] = useState('');
+	const [score, setScore] = useLocalStorage(SCORE, 0);
+	const [streak, setStreak] = useLocalStorage(STREAK, 0);
 	const [gameState, setGameState] = useState<GameState>('playing');
-	const [streak, setStreak] = useState(0);
 	const [unit, setUnit] = useState<TemperatureUnit>('fahrenheit');
 
 	const handleGuess = () => {
@@ -52,7 +61,6 @@ function CityRouteComponent() {
 		// Convert guess to celsius for comparison if needed
 		const guessInCelsius = unit === 'fahrenheit' ? convertToCelsius(guessNum) : guessNum;
 		const difference = Math.abs(guessInCelsius - currentCity.temp);
-		setAttempts((prev) => prev + 1);
 
 		if (difference < 1) {
 			setFeedback('+10 🎯 Perfect! Exactly right!');
@@ -82,8 +90,9 @@ function CityRouteComponent() {
 	};
 
 	const nextCity = () => {
-		if (cityStep === 9) {
-			// TODO: game over
+		if (cityStep === MAX_ROUNDS - 1) {
+			setGameState('gameover');
+			navigate({ to: '/game-over' });
 			return;
 		}
 
@@ -99,15 +108,13 @@ function CityRouteComponent() {
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-600 via-sky-500 to-blue-700 p-4">
 			<div className="w-full max-w-md space-y-6">
-				{/* Header Stats */}
 				<div className="flex items-center justify-between">
-					<LeaderboardModal currentScore={score} currentStreak={streak} attempts={attempts} />
+					<LeaderboardModal currentScore={score} currentStreak={streak} attempts={cityStep + 1} />
 					<div className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
 						<span className="text-sm text-white">Streak: {streak}</span>
 					</div>
 					<Button
 						onClick={resetGame}
-						variant="ghost"
 						size="sm"
 						className="rounded-full bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
 					>
@@ -115,45 +122,34 @@ function CityRouteComponent() {
 					</Button>
 				</div>
 
-				{/* Unit Toggle */}
 				<UnitToggle unit={unit} onUnitChange={setUnit} />
 
-				{/* Main Game Card */}
 				<Card className="border-white/20 bg-white/10 shadow-2xl backdrop-blur-md">
-					<div className="pb-4 text-center">
-						<div className="mb-2 flex items-center justify-center gap-2">
-							<MapPin className="size-8 text-white" />
-							<Skeleton visible={isLoading} className="h-8 w-fit self-center">
-								<Text className="text-2xl font-bold text-white">
-									{currentCity?.name || 'Random City'}
-								</Text>
-							</Skeleton>
+					{gameState !== 'gameover' && (
+						<div className="pb-4 text-center">
+							<div className="mb-2 flex items-center justify-center gap-2">
+								<MapPin className="size-8 text-white" />
+								<Text className="text-2xl font-bold text-white">{currentCity.name}</Text>
+							</div>
+							<Badge variant="secondary" className="border-white/30 bg-white/20 text-white">
+								{currentCity?.country}
+							</Badge>
 						</div>
-						<Badge variant="secondary" className="border-white/30 bg-white/20 text-white">
-							{currentCity?.country}
-						</Badge>
-					</div>
+					)}
 
 					<Card.Section className="space-y-6 px-4">
-						{/* Weather Icon Display */}
-						<Skeleton circle visible={isLoading} className="w-fit justify-self-center">
-							<WeatherIcon temperature={currentCity?.temp || 0} />
-						</Skeleton>
+						{gameState !== 'gameover' && <WeatherIcon temperature={currentCity?.temp || 0} />}
 
-						{/* Game State Display */}
 						{gameState === 'playing' && (
-							<Skeleton visible={isLoading} className="justify-self-center">
-								<TemperatureInput
-									guess={guess}
-									unit={unit}
-									cityName={currentCity?.name || ''}
-									onGuessChange={setGuess}
-									onSubmitGuess={handleGuess}
-								/>
-							</Skeleton>
+							<TemperatureInput
+								guess={guess}
+								unit={unit}
+								cityName={currentCity?.name || ''}
+								onGuessChange={setGuess}
+								onSubmitGuess={handleGuess}
+							/>
 						)}
 
-						{/* Feedback Display */}
 						{(gameState === 'correct' || gameState === 'wrong') && (
 							<GameFeedback
 								feedback={feedback}
@@ -164,12 +160,12 @@ function CityRouteComponent() {
 							/>
 						)}
 
-						{/* Game Stats */}
-						<GameStats attempts={cityStep} score={score} streak={streak} />
+						{gameState === 'gameover' && <GameOver />}
+
+						<GameStats attempts={cityStep + 1} score={score} streak={streak} />
 					</Card.Section>
 				</Card>
 
-				{/* Instructions */}
 				<Instructions unit={unit} />
 			</div>
 		</div>

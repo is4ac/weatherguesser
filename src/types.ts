@@ -13,5 +13,5 @@ export interface LeaderboardEntry {
 	date: string;
 }
 
-export type GameState = 'playing' | 'correct' | 'wrong';
+export type GameState = 'playing' | 'correct' | 'wrong' | 'gameover';
 export type TemperatureUnit = 'celsius' | 'fahrenheit';

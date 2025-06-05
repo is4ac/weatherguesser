@@ -14,6 +14,7 @@ export function Instructions({ unit }: InstructionsProps) {
 					<li>
 						• Guess the current temperature in {unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}
 					</li>
+					<li>• The list of cities changes every day</li>
 					<li>• Perfect guess: 10 points</li>
 					<li>• Within 2°C / ~4°F: 7 points</li>
 					<li>• Within 5°C / ~9°F: 5 points</li>
