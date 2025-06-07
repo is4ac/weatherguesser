@@ -149,7 +149,7 @@ function CityRouteComponent() {
 					)}
 
 					<Card.Section className="space-y-6 px-4">
-						{gameState !== 'gameover' && <WeatherIcon temperature={currentCity?.temp || 0} />}
+						{gameState !== 'gameover' && <WeatherIcon condition={currentCity.condition} />}
 
 						{gameState === 'playing' && (
 							<TemperatureInput

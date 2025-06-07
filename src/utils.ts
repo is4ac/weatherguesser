@@ -4,14 +4,6 @@ import { cities } from './data';
 export const convertToFahrenheit = (celsius: number) => Math.round((celsius * 9) / 5 + 32);
 export const convertToCelsius = (fahrenheit: number) => ((fahrenheit - 32) * 5) / 9;
 
-export const getTemperatureColor = (temp: number) => {
-	if (temp < 0) return 'from-blue-600 to-blue-800';
-	if (temp < 10) return 'from-blue-400 to-blue-600';
-	if (temp < 20) return 'from-blue-300 to-green-400';
-	if (temp < 30) return 'from-green-400 to-yellow-400';
-	return 'from-yellow-400 to-red-500';
-};
-
 function random(seed: number, step: number) {
 	const numbers: Record<number, boolean> = {};
 

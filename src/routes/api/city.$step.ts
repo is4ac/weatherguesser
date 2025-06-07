@@ -11,17 +11,20 @@ export const APIRoute = createAPIFileRoute('/api/city/$step')({
 
 		const city = getRandomCity(parseInt(params.step));
 
-		console.info(city);
-
 		const response = await ofetch(
 			`${WEATHER_API_BASE_URL}?lat=${city.lat}&lon=${city.lon}&units=metric&appid=${process.env.OPEN_WEATHER_API_KEY}`
 		);
 
 		// return json(response);
 
-		return json({
+		const data = {
 			...city,
-			temp: response.main.temp
-		});
+			temp: response.main.temp,
+			condition: response.weather[0].main
+		};
+
+		console.info(data);
+
+		return json(data);
 	}
 });
