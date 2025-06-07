@@ -1,6 +1,7 @@
 export interface City {
 	name: string;
 	country: string;
+	countryCode: string;
 	temp: number;
 	lat: number;
 	lon: number;
