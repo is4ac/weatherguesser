@@ -39,7 +39,7 @@ export function TemperatureInput({
 					<NumberInput
 						value={guess}
 						onChange={(value) => onGuessChange(value + '')}
-						placeholder={`Enter temperature in ${getUnitSymbol()}`}
+						placeholder={`Temp in ${getUnitSymbol()}`}
 						size="md"
 						className="border-white/30 bg-white/20 pr-12 text-white placeholder:text-white/60"
 						onKeyUp={handleKeyUp}

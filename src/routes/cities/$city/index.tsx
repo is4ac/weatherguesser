@@ -3,7 +3,7 @@ import { WeatherIcon } from '@/components/weather-icon';
 import { TemperatureInput } from '@/components/temperature-input';
 import { GameFeedback } from '@/components/game-feedback';
 import { GameStats } from '@/components/game-stats';
-import { Badge, Button, Card, Skeleton, Text } from '@mantine/core';
+import { Badge, Button, Card, Text } from '@mantine/core';
 import { MapPin, RotateCcw } from 'lucide-react';
 import { cityQueries } from '@/operations/city';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -131,14 +131,25 @@ function CityRouteComponent() {
 								<MapPin className="size-8 text-white" />
 								<Text className="text-2xl font-bold text-white">{currentCity.name}</Text>
 							</div>
-							<Badge variant="secondary" className="border-white/30 bg-white/20 text-white">
-								{currentCity?.country}
+							<Badge
+								variant="secondary"
+								size="lg"
+								className="border-white/30 bg-white/20 text-white"
+								leftSection={
+									<img
+										width={25}
+										alt={currentCity.country}
+										src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${currentCity.countryCode}.svg`}
+									/>
+								}
+							>
+								{currentCity.country}
 							</Badge>
 						</div>
 					)}
 
 					<Card.Section className="space-y-6 px-4">
-						{gameState !== 'gameover' && <WeatherIcon temperature={currentCity?.temp || 0} />}
+						{gameState !== 'gameover' && <WeatherIcon condition={currentCity.condition} />}
 
 						{gameState === 'playing' && (
 							<TemperatureInput
