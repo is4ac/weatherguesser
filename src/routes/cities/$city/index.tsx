@@ -11,7 +11,7 @@ import { City, GameState, TemperatureUnit } from '@/types';
 import { Instructions } from '@/components/instructions';
 import { LeaderboardModal } from '@/components/leaderboard-modal';
 import { UnitToggle } from '@/components/unit-toggle';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { convertToCelsius } from '@/utils';
 import { GameOver } from '@/components/game-over';
 import { MAX_ROUNDS, SCORE, STREAK } from '@/constants';
@@ -49,6 +49,14 @@ function CityRouteComponent() {
 	const [streak, setStreak] = useLocalStorage(STREAK, 0);
 	const [gameState, setGameState] = useState<GameState>('playing');
 	const [unit, setUnit] = useState<TemperatureUnit>('fahrenheit');
+
+	useEffect(() => {
+		if (cityStep === 0) {
+			// Reset score and streak
+			setScore(0);
+			setStreak(0);
+		}
+	}, [cityStep]);
 
 	const handleGuess = () => {
 		if (!currentCity) {
@@ -101,10 +109,6 @@ function CityRouteComponent() {
 		navigate({ to: '/cities/$city', params: { city: `${cityStep + 1}` } });
 	};
 
-	const resetGame = () => {
-		navigate({ to: '/cities' });
-	};
-
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-600 via-sky-500 to-blue-700 p-4 pb-12">
 			<div className="w-full max-w-md space-y-6">
@@ -113,13 +117,6 @@ function CityRouteComponent() {
 					<div className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
 						<span className="text-sm text-white">Streak: {streak}</span>
 					</div>
-					<Button
-						onClick={resetGame}
-						size="sm"
-						className="rounded-full bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
-					>
-						<RotateCcw className="h-4 w-4" />
-					</Button>
 				</div>
 
 				<UnitToggle unit={unit} onUnitChange={setUnit} />
