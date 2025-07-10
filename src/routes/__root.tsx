@@ -31,8 +31,9 @@ export const Route = createRootRouteWithContext<{
 				content: 'width=device-width, initial-scale=1'
 			},
 			...seo({
-				title: 'Weather Guesser',
-				description: 'Guess the current temperature of random cities around the world!'
+				title: 'Weather Guesser Game',
+				description: 'Guess the current temperature of random cities around the world!',
+				keywords: 'weather, guesser, game, temperature, cities'
 			})
 		],
 		links: [
